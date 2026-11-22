@@ -120,9 +120,9 @@
       ["Lina", "1111", "🦊", "#f97316", "", "ja", "2026-11-01"],
       ["Ben", "2222", "🐻", "#2563eb", "", "ja", "2026-11-01"],
       ["Mila", "3333", "🐼", "#16a34a", "", "ja", "2026-11-01"]];
-    var lern = ["unternehmen", "aktie", "boerse", "musterdepot"];
-    lern.forEach(function (l, i) { daten.blaetter.Lernen.push(["2026-11-1" + i + " 17:00:00", "Ben", l, 5, 6]); });
-    ["unternehmen", "aktie"].forEach(function (l) { daten.blaetter.Lernen.push(["2026-11-12 16:00:00", "Mila", l, 6, 6]); });
+    var lern = ["wirtschaft", "unternehmen", "aktie", "boersengang", "boerse", "musterdepot"];
+    lern.forEach(function (l, i) { daten.blaetter.Lernen.push(["2026-11-" + (10 + i) + " 17:00:00", "Ben", l, 5, 6]); });
+    ["wirtschaft", "unternehmen", "aktie"].forEach(function (l) { daten.blaetter.Lernen.push(["2026-11-12 16:00:00", "Mila", l, 6, 6]); });
     daten.blaetter.Handel.push(["2026-11-14 10:00:00", "Ben", "Kauf", "NTDO", 4, 49.8, 1, 199.2]);
     daten.blaetter.Handel.push(["2026-11-14 10:05:00", "Ben", "Kauf", "EUNL", 3, 120.1, 1, 360.3]);
     var heute = new Date();

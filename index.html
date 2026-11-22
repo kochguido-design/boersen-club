@@ -199,10 +199,11 @@ mark { background: var(--gold-hell); padding: 0 3px; border-radius: 4px; }
     laedt = true;
     return api("stand").then(function (r) {
       laedt = false;
-      if (r.ok) { S.stand = r; return; }
+      if (r.ok) { S.stand = r; S.ladeFehler = ""; return; }
       if (r.fehler === "passwort") { abmelden(true); return; }
-      if (!stumm) toast(r.text || "Fehler beim Laden");
-    }, function () { laedt = false; if (!stumm) toast("Keine Verbindung zum Club-Server. Bist du online?"); });
+      S.ladeFehler = r.text || (r.fehler && r.fehler.length > 12 ? r.fehler : "Fehler beim Laden");
+      if (!stumm) toast(S.ladeFehler);
+    }, function () { laedt = false; S.ladeFehler = "Keine Verbindung zum Club-Server. Bist du online?"; if (!stumm) toast(S.ladeFehler); });
   }
   function abmelden(passwortAuch) {
     S.kind = null; S.pin = null; schreib("bc-kind", null); schreib("bc-pin", null);
@@ -332,7 +333,7 @@ mark { background: var(--gold-hell); padding: 0 3px; border-radius: 4px; }
         if (r.ok) {
           S.kind = S.pinKind; S.pin = pin; schreib("bc-kind", S.kind); schreib("bc-pin", S.pinMerken ? pin : null);
           S.pinEingabe = ""; standLaden().then(function () { geh("#/"); });
-        } else { S.fehler = r.text || "Das hat nicht geklappt."; S.pinEingabe = ""; zeichne(); }
+        } else { S.fehler = r.text || (r.fehler && r.fehler.length > 12 ? r.fehler : "Das hat nicht geklappt."); S.pinEingabe = ""; zeichne(); }
       }, function () { S.fehler = "Keine Verbindung."; S.pinEingabe = ""; zeichne(); });
     }
   }
@@ -383,7 +384,7 @@ mark { background: var(--gold-hell); padding: 0 3px; border-radius: 4px; }
   // ---------- Lernen ----------
   function seiteLernen() {
     var d = meinDepot();
-    var h = "<h1>📚 Lernen</h1><p class=\"leise\">Schritt für Schritt vom Unternehmen bis zur Börse. Jede Lektion dauert etwa 10 Minuten. Für jede Frage, die du beim ersten Versuch richtig hast, bekommst du einen Stern ⭐.</p>";
+    var h = "<h1>📚 Lernen</h1><p class=\"leise\">Schritt für Schritt von der Wirtschaft über Unternehmen und Börse bis zum eigenen Depot. Jede Lektion dauert etwa 10 bis 15 Minuten. Für jede Frage, die du beim ersten Versuch richtig hast, bekommst du einen Stern ⭐.</p>";
     BC.module.forEach(function (m) {
       h += '<div class="modul-kopf"><span>' + esc(m.emoji) + "</span>Teil " + m.nr + ": " + esc(m.titel) + "</div>";
       BC.lektionen.filter(function (l) { return l.modul === m.nr; }).forEach(function (l) {
@@ -676,7 +677,16 @@ mark { background: var(--gold-hell); padding: 0 3px; border-radius: 4px; }
       if (!S.kinderAuswahl) { app.innerHTML = '<div class="laden">Lädt …</div>'; kinderLaden(); return; }
       app.innerHTML = seiteWer(); return;
     }
-    if (!S.stand) { app.innerHTML = '<div class="laden">Lädt …</div>'; standLaden().then(function () { if (S.stand) zeichne(); }); return; }
+    if (!S.stand) {
+      app.innerHTML = '<div class="laden">Lädt …</div>';
+      standLaden(true).then(function () {
+        if (S.stand) { zeichne(); return; }
+        if (!S.passwort || !S.kind) return;
+        app.innerHTML = '<div class="karte" style="margin:40px auto;max-width:420px;text-align:center"><p>' + esc(S.ladeFehler || "Der Club-Server antwortet gerade nicht.") +
+          '</p><p><a class="knopf" href="javascript:location.reload()">Nochmal versuchen</a></p></div>';
+      });
+      return;
+    }
     if (!meinDepot()) { abmelden(false); return; }
     var seite = teile[0] || "";
     var html;
@@ -692,7 +702,7 @@ mark { background: var(--gold-hell); padding: 0 3px; border-radius: 4px; }
   function kinderLaden() {
     api("anmelden").then(function (r) {
       if (r.ok) { S.kinderAuswahl = r.kinder; zeichne(); }
-      else { S.passwort = null; schreib("bc-passwort", null); S.fehler = r.text || "Das hat nicht geklappt."; zeichne(); }
+      else { S.passwort = null; schreib("bc-passwort", null); S.fehler = r.text || (r.fehler && r.fehler.length > 12 ? r.fehler : "Das hat nicht geklappt."); zeichne(); }
     }, function () { app.innerHTML = '<div class="laden">Keine Verbindung zum Club-Server.<br><br><button class="knopf" data-aktion="neu-laden">Nochmal versuchen</button></div>'; });
   }
 
@@ -707,7 +717,7 @@ mark { background: var(--gold-hell); padding: 0 3px; border-radius: 4px; }
       S.passwort = pw; S.fehler = "";
       api("anmelden").then(function (r) {
         if (r.ok) { schreib("bc-passwort", pw); S.kinderAuswahl = r.kinder; geh("#/"); }
-        else { S.passwort = null; S.fehler = r.text || "Das hat nicht geklappt."; zeichne(); }
+        else { S.passwort = null; S.fehler = r.text || (r.fehler && r.fehler.length > 12 ? r.fehler : "Das hat nicht geklappt."); zeichne(); }
       }, function () { S.passwort = null; S.fehler = "Keine Verbindung zum Club-Server."; zeichne(); });
     }
     if (f === "zahl") {
