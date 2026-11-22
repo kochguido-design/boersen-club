@@ -5,7 +5,8 @@ window.BC = BC;
 BC.module = [
   { nr: 1, titel: "Wirtschaft, Unternehmen und Aktien", emoji: "🏭" },
   { nr: 2, titel: "Wie Unternehmen Geld verdienen und wem sie gehören", emoji: "💶" },
-  { nr: 3, titel: "Klug anlegen", emoji: "🧠" }
+  { nr: 3, titel: "Kurs, Handel und Rendite", emoji: "📈" },
+  { nr: 4, titel: "Klug anlegen", emoji: "🧠" }
 ];
 
 BC.lektionen = [
@@ -311,7 +312,7 @@ BC.lektionen = [
     ]
   },
 
-  { id: "firmenwert", modul: 2, titel: "Wie entsteht der Wert einer Aktie?", emoji: "⚖️", dauer: 14,
+  { id: "firmenwert", modul: 3, titel: "Wie entsteht der Wert einer Aktie?", emoji: "⚖️", dauer: 14,
     einleitung: "Woher kommt der Preis einer Aktie, was steckt dahinter, und warum sagt der Kurs allein so wenig?",
     karten: [
       { titel: "Der Kurs: ein Preis im Moment", bild: "🏷️",
@@ -341,7 +342,66 @@ BC.lektionen = [
     ]
   },
 
-  { id: "nachrichten", modul: 2, titel: "Nachrichten und Kurse", emoji: "📰", dauer: 10,
+  { id: "ausschuettung", modul: 3, titel: "Dividenden und Aktienrückkäufe", emoji: "💸", dauer: 14,
+    einleitung: "Wie kommen Aktionäre an den Gewinn ihrer Firma? Es gibt zwei Wege: die Dividende und den Aktienrückkauf. Hier erfährst du, wie beide funktionieren und worauf man achten sollte.",
+    karten: [
+      { titel: "Drei Möglichkeiten für den Gewinn", bild: "🔀",
+        text: "Die Speichenwerk AG hat 3 Mio. € Gewinn gemacht. Was soll sie damit tun? Es gibt drei Möglichkeiten, die sie auch mischen kann:\n1. **Behalten und investieren**: eine neue Halle bauen, forschen, Schulden zurückzahlen.\n2. **Dividende**: Geld direkt an alle Aktionäre auszahlen.\n3. **Aktienrückkauf**: mit dem Geld eigene Aktien an der Börse zurückkaufen.\n[[Bei allen drei Wegen bleibt der Gewinn bei den Aktionären, nur auf unterschiedliche Art.]] Beim Behalten steckt er in einer wertvolleren Firma, bei der Dividende auf dem Konto, beim Rückkauf in einem größeren Anteil." },
+      { titel: "Die Dividende Schritt für Schritt", bild: "📅",
+        text: "So läuft eine Dividende in Deutschland meistens ab:\n1. Vorstand und Aufsichtsrat **schlagen** eine Dividende vor, zum Beispiel 1 € pro Aktie.\n2. Die **Hauptversammlung** stimmt darüber ab.\n3. Wer am Tag der Hauptversammlung Aktien im Depot hat, bekommt die Dividende. Ein paar Tage später ist sie auf dem Konto.\nIn Deutschland gibt es die Dividende meist **einmal im Jahr**, in den USA zahlen viele Firmen **jedes Quartal**.\nBeispiel: Lina hat 40 Aktien, die Dividende beträgt 1,25 € pro Aktie. Sie bekommt 40 × 1,25 € = [[50 €]].",
+        profi: "Auf Dividenden fallen Steuern an, wenn der jährliche Freibetrag von 1.000 € pro Person aufgebraucht ist. Dann behält die Bank rund ein Viertel ein und gibt es direkt an das Finanzamt weiter. Was übrig bleibt, nennt man **Nettodividende**." },
+      { titel: "Kein Geschenk: der Dividendenabschlag", bild: "⚖️",
+        text: "Am Tag nach der Hauptversammlung fällt der Kurs meist ungefähr um die Höhe der Dividende. Das nennt man **Dividendenabschlag**. Warum? Das Geld hat die Firma verlassen, also ist sie genau so viel weniger wert.\nBeispiel: Die Aktie steht bei 50 €, die Dividende beträgt 2 €. Am nächsten Tag steht sie bei etwa 48 €. Ben hat 10 Aktien: Vorher waren sie 500 € wert. Danach hat er Aktien für 480 € und 20 € auf dem Konto, zusammen wieder 500 €.\n[[Die Dividende ist ein Teil des Gewinns, den die Firma schon verdient hat, kein Extra-Geld aus dem Nichts.]]\nIm Börsen-Club werden Dividenden nicht gutgeschrieben. Du siehst dort nur den Abschlag. Bei echten Aktien kommt das Geld aufs Konto." },
+      { titel: "Der Aktienrückkauf", bild: "🔁",
+        text: "Beim **Aktienrückkauf** kauft die Firma mit ihrem Geld eigene Aktien an der Börse zurück. Meist werden diese Aktien danach **eingezogen**, also vernichtet. Es gibt dann weniger Aktien.\nDenk an die Pizza: Sie bleibt gleich groß, wird aber in weniger Stücke geteilt. [[Jedes übrige Stück wird größer.]]\nBeispiel: Speichenwerk hat 1 Million Aktien und kauft für 3 Mio. € 100.000 Aktien zu je 30 € zurück. Danach gibt es nur noch 900.000 Aktien.\nVerdient die Firma wieder 3 Mio. €, steigt der Gewinn pro Aktie von 3 € auf 3.000.000 € ÷ 900.000 ≈ 3,33 €.\nOma Rosi hat 1.000 Aktien. Vorher gehörten ihr 0,1 % der Firma, jetzt 1.000 ÷ 900.000 ≈ 0,11 %, ohne dass sie etwas gekauft hat." },
+      { titel: "Warum Rückkauf statt Dividende?", bild: "🤔",
+        text: "Firmen haben gute Gründe für Rückkäufe:\n• **Nur wer will, bekommt Geld**: Wer verkaufen möchte, verkauft an die Firma. Wer bleiben will, bekommt einen größeren Anteil.\n• **Steuern erst später**: Auf eine Dividende fallen sofort Steuern an. Beim Rückkauf erst dann, wenn man selbst verkauft.\n• **Flexibel**: Eine Firma kann Rückkäufe in einem schlechten Jahr leise beenden. Eine Dividende zu kürzen, wirkt dagegen oft wie ein Alarmzeichen.\nIn den USA sind Rückkäufe sehr verbreitet. In Deutschland muss die Hauptversammlung sie erlauben, und die Firma darf meist höchstens 10 % ihrer Aktien besitzen.",
+        profi: "Ein Rückkauf ist nur dann gut für die Aktionäre, die bleiben, wenn die Firma ihre Aktien nicht zu teuer zurückkauft. Kauft sie zu überhöhten Kursen, verschenkt sie Geld an die Verkäufer." },
+      { titel: "Worauf man achten sollte", bild: "🔍",
+        text: "Ausschüttungen sind nicht automatisch gut:\n• **Junge, schnell wachsende Firmen** zahlen oft gar keine Dividende. Sie stecken jeden Euro ins Wachstum, und das kann für die Aktionäre mehr bringen.\n• **Eine Dividende ist nie garantiert.** In Krisen kürzen oder streichen Firmen sie.\n• **Warnzeichen**: Eine Firma zahlt mehr aus, als sie verdient, oder leiht sich sogar Geld dafür. Das geht nicht lange gut.\n[[Auf Dauer kann eine Firma nur ausschütten, was sie auch verdient.]]" }
+    ],
+    ausprobieren: "Such dir eine Firma aus dem Börsen-Club aus und finde mit deinen Eltern heraus: Zahlt sie eine Dividende, und wann ist ihre Hauptversammlung? Kauft sie auch eigene Aktien zurück? Schau dir in der App den Kurs am Tag nach der Hauptversammlung an.",
+    quiz: [
+      { frage: "Ben hat 25 Aktien. Die Firma zahlt 2,40 € Dividende pro Aktie. Wie viel bekommt er (vor Steuern)?", zahl: 60, einheit: "€", erklaerung: "25 × 2,40 € = 60 €." },
+      { frage: "Wer beschließt in Deutschland, wie hoch die Dividende ist?", optionen: ["Die Hauptversammlung der Aktionäre", "Die Börse", "Die Bank des Aktionärs"], richtig: 0, erklaerung: "Vorstand und Aufsichtsrat schlagen eine Dividende vor, die Hauptversammlung stimmt darüber ab." },
+      { frage: "Eine Aktie steht bei 80 €, die Firma zahlt 3 € Dividende. Bei welchem Kurs startet die Aktie am nächsten Tag ungefähr?", zahl: 77, einheit: "€", erklaerung: "Der Kurs fällt meist etwa um die Dividende: 80 € − 3 € = 77 €. Das Geld ist ja aus der Firma geflossen." },
+      { frage: "Was passiert bei einem Aktienrückkauf mit eingezogenen Aktien?", optionen: ["Es gibt danach weniger Aktien, jede übrige ist ein größerer Anteil an der Firma", "Die Aktien werden an Mitarbeiter verschenkt", "Es gibt danach mehr Aktien"], richtig: 0, erklaerung: "Eingezogene Aktien werden vernichtet. Dieselbe Firma ist auf weniger Aktien verteilt." },
+      { frage: "Eine Firma hat 2 Millionen Aktien und kauft 200.000 davon zurück. Wie viele Aktien gibt es danach?", zahl: 1800000, einheit: "Stück", erklaerung: "2.000.000 − 200.000 = 1.800.000 Aktien." },
+      { frage: "Eine Firma verdient 9 Mio. €. Nach einem Rückkauf hat sie noch 3 Millionen Aktien. Wie hoch ist der Gewinn pro Aktie?", zahl: 3, einheit: "€", erklaerung: "9.000.000 € ÷ 3.000.000 Aktien = 3 € pro Aktie." },
+      { frage: "Eine Firma zahlt seit Jahren mehr Dividende aus, als sie verdient, und leiht sich dafür Geld. Wie ist das zu bewerten?", optionen: ["Als Warnzeichen, denn auf Dauer kann man nur ausschütten, was man verdient", "Als gutes Zeichen, je mehr Dividende, desto besser", "Das ist egal"], richtig: 0, erklaerung: "Wer mehr ausschüttet, als er verdient, zehrt die Firma auf. Das geht nicht lange gut." }
+    ]
+  },
+
+  { id: "kursbeispiele", modul: 3, titel: "Wie entsteht der Kurs? Beispiele", emoji: "🔬", dauer: 14,
+    einleitung: "Du weißt jetzt, was hinter dem Wert einer Aktie steckt. Hier siehst du an Beispielen, wie der Kurs an der Börse wirklich entsteht und warum er sich bewegt, mit erfundenen Zahlen und echten Ereignissen.",
+    karten: [
+      { titel: "Beispiel 1: Das Orderbuch", bild: "📒",
+        text: "An der Börse sammelt ein Computer alle Aufträge in einem **Orderbuch**. Für die Aktie der Speichenwerk AG steht dort:\n**Käufer**: Anna will 100 Stück für höchstens 51 €. Bruno will 200 Stück für höchstens 50 €. Cem will 300 Stück für höchstens 49 €.\n**Verkäufer**: Dora verkauft 150 Stück für mindestens 48 €. Emil verkauft 200 Stück für mindestens 50 €. Fritz verkauft 100 Stück für mindestens 52 €.\nBei 50 € wollen Anna und Bruno zusammen 300 Stück kaufen, und Dora und Emil bieten 350 Stück an. 300 Stück können den Besitzer wechseln, bei 49 € oder 51 € wären es weniger.\n[[Die Börse wählt den Preis, zu dem am meisten gehandelt werden kann: Der Kurs ist 50 €.]] Cem und Fritz gehen diesmal leer aus.",
+        profi: "Das nennt man **Meistausführungsprinzip**. So wird der Kurs zum Beispiel bei der Eröffnung um 9 Uhr festgestellt. Während des Tages laufen Aufträge laufend ein und werden sofort zusammengeführt, sobald Käufer und Verkäufer zueinander passen." },
+      { titel: "Beispiel 2: Gewinn mal Stimmung", bild: "🎚️",
+        text: "Eine Faustregel: Kurs ≈ Gewinn pro Aktie × wie viel die Anleger dafür zu zahlen bereit sind (das KGV).\nEine Firma verdient 2 € pro Aktie, Anleger zahlen das 15-Fache: Kurs 30 €.\n• **Der Gewinn steigt** auf 2,40 €, das 15-Fache bleibt: Kurs 36 €, also +20 %.\n• **Die Stimmung kippt**, Anleger zahlen nur noch das 10-Fache: Kurs 20 €, obwohl die Firma genauso viel verdient.\n• Beides zusammen: 2,40 € × 10 = 24 €.\n[[Ein Kurs hat zwei Stellschrauben: den Gewinn und das Vertrauen der Anleger in die Zukunft.]]" },
+      { titel: "Beispiel 3: Ein Übernahmeangebot", bild: "🤝",
+        text: "Die Aktie einer kleinen Firma steht bei 30 €. Plötzlich meldet ein großer Konzern: Wir wollen die Firma kaufen und bieten jedem Aktionär **40 € pro Aktie**.\nWas passiert mit dem Kurs? Er springt fast sofort auf etwa 38 bis 39 €. Niemand verkauft mehr für 30 €, wenn er bald 40 € bekommen kann.\nWarum nicht gleich 40 €? Weil noch nicht sicher ist, ob die Übernahme klappt. Vielleicht verbietet sie eine Behörde, oder zu wenige Aktionäre nehmen das Angebot an.\n[[Der Kurs zeigt immer, was die Anleger in diesem Moment für wahrscheinlich halten.]]" },
+      { titel: "Beispiel 4: Eine Nachricht, zwei Richtungen", bild: "🛢️",
+        text: "Der Ölpreis steigt stark, zum Beispiel weil in einem Förderland Krieg ausbricht. Was passiert?\n• Aktien von **Fluggesellschaften** wie der Lufthansa fallen oft: Kerosin wird teurer, ihre Kosten steigen, ihr Gewinn sinkt.\n• Aktien von **Ölkonzernen** steigen oft: Sie verkaufen ihr Öl jetzt teurer.\n[[Dieselbe Nachricht kann für die eine Firma schlecht und für die andere gut sein.]] Deshalb lohnt es sich zu fragen: Wie verdient diese Firma ihr Geld, und was ändert die Nachricht daran?" },
+      { titel: "Echtes Beispiel: der Corona-Absturz 2020", bild: "🦠",
+        text: "Im Februar 2020 breitete sich das Coronavirus in Europa aus. Niemand wusste, wie schlimm es wird. Geschäfte schlossen, Flugzeuge blieben am Boden.\nViele Anleger verkauften aus Angst. Der **DAX** fiel innerhalb von etwa vier Wochen um fast 40 %.\nDann kamen Hilfspakete der Staaten, die Zentralbanken senkten die Zinsen, und es gab Hoffnung auf Impfstoffe. Ende 2020 stand der DAX wieder ungefähr auf seinem alten Stand.\n[[Wer im März 2020 aus Angst verkauft hat, hat den Verlust fest gemacht und die Erholung verpasst.]] Das muss aber nicht jedes Mal so schnell gehen." },
+      { titel: "Echtes Beispiel: Wirecard", bild: "💥",
+        text: "**Wirecard** war eine Firma für digitale Zahlungen aus der Nähe von München und gehörte ab 2018 sogar zum DAX. Viele hielten sie für eine große Zukunftshoffnung.\nIm Juni 2020 kam heraus: Rund 1,9 Milliarden €, die angeblich auf Konten lagen, gab es sehr wahrscheinlich gar nicht. Die Zahlen waren gefälscht.\nDer Kurs fiel innerhalb weniger Tage um mehr als 90 %, kurz darauf meldete die Firma **Insolvenz** an. Es war die erste Pleite einer Firma, die im DAX war.\n[[Auch große, bekannte Firmen können scheitern. Deshalb verteilen kluge Anleger ihr Geld auf viele Firmen.]]" }
+    ],
+    ausprobieren: "Spiel mit deiner Familie Börse: Jeder schreibt auf einen Zettel, ob er eine Sammelkarte oder Süßigkeit kaufen oder verkaufen will, wie viele und zu welchem Preis höchstens oder mindestens. Legt alle Zettel als Orderbuch hin und sucht den Preis, zu dem am meisten getauscht werden kann.",
+    quiz: [
+      { frage: "Im Orderbuch: Käufer wollen 100 Stück bis 21 € und 100 Stück bis 20 €. Verkäufer bieten 100 Stück ab 19 € und 100 Stück ab 20 €. Bei welchem Kurs wird am meisten gehandelt?", zahl: 20, einheit: "€", erklaerung: "Bei 20 € wollen 200 Stück gekauft und 200 Stück verkauft werden. Bei 19 € oder 21 € wären es nur 100 Stück." },
+      { frage: "Eine Firma verdient 3 € pro Aktie. Anleger zahlen das 20-Fache des Gewinns. Wie hoch ist der Kurs ungefähr?", zahl: 60, einheit: "€", erklaerung: "3 € × 20 = 60 €." },
+      { frage: "Der Gewinn einer Firma bleibt gleich, aber die Anleger trauen ihr weniger zu. Was passiert meist mit dem Kurs?", optionen: ["Er fällt", "Er steigt", "Er bleibt sicher gleich"], richtig: 0, erklaerung: "Zahlen die Anleger ein kleineres Vielfaches des Gewinns, sinkt der Kurs, auch wenn die Firma gleich viel verdient." },
+      { frage: "Ein Konzern bietet 50 € pro Aktie für eine Firma, deren Aktie bei 40 € stand. Was passiert meistens?", optionen: ["Der Kurs springt in die Nähe von 50 €, bleibt aber etwas darunter", "Der Kurs fällt auf 30 €", "Der Kurs steigt sofort auf 100 €"], richtig: 0, erklaerung: "Die Anleger erwarten bald 50 €. Weil noch nicht sicher ist, ob die Übernahme klappt, bleibt der Kurs meist knapp darunter." },
+      { frage: "Der Ölpreis steigt stark. Welche Aktien fallen dann oft?", optionen: ["Aktien von Fluggesellschaften", "Aktien von Ölkonzernen", "Gar keine"], richtig: 0, erklaerung: "Für Fluggesellschaften wird Kerosin teurer, ihre Kosten steigen. Ölkonzerne verdienen dagegen oft mehr." },
+      { frage: "Ein Index steht bei 10.000 Punkten und fällt um 40 %. Bei wie vielen Punkten steht er danach?", zahl: 6000, einheit: "Punkte", erklaerung: "40 % von 10.000 sind 4.000. 10.000 − 4.000 = 6.000 Punkte." },
+      { frage: "Was lehrt der Fall Wirecard?", optionen: ["Auch bekannte Firmen können scheitern, deshalb sollte man sein Geld auf viele Firmen verteilen", "DAX-Firmen können nie pleitegehen", "Man sollte nur Aktien von Zahlungsfirmen kaufen"], richtig: 0, erklaerung: "Wirecard war im DAX und brach trotzdem zusammen. Wer nur auf eine Firma setzt, kann viel verlieren." }
+    ]
+  },
+
+  { id: "nachrichten", modul: 3, titel: "Nachrichten und Kurse", emoji: "📰", dauer: 10,
     einleitung: "Warum ein Kurs an manchen Tagen plötzlich springt, und warum gute Nachrichten nicht immer steigende Kurse bedeuten.",
     karten: [
       { titel: "Quartalszahlen", bild: "📊",
@@ -369,7 +429,66 @@ BC.lektionen = [
   },
 
   // ---------------------------------------------------------------- Modul 3
-  { id: "risiko", modul: 3, titel: "Risiko und Streuen", emoji: "🛡️", dauer: 12,
+  { id: "handel", modul: 3, titel: "Wie Aktien gehandelt werden", emoji: "🔄", dauer: 12,
+    einleitung: "Im Börsen-Club tippst du auf „Kaufen“, und fertig. Im echten Leben gibt es ein paar Dinge mehr zu wissen: zwei Preise statt einem, verschiedene Arten von Aufträgen und versteckte Kosten.",
+    karten: [
+      { titel: "Der Weg einer Order", bild: "🛣️",
+        text: "Lina möchte echte Aktien kaufen. Das passiert:\n1. Sie gibt in der App ihrer Bank eine **Order** ein: welche Aktie, wie viele, zu welchem Preis höchstens.\n2. Die Bank leitet den Auftrag an einen **Handelsplatz** weiter, zum Beispiel an Xetra in Frankfurt.\n3. Dort landet er im **Orderbuch** und wird mit einem passenden Verkäufer zusammengeführt.\n4. Die Bank bucht das Geld ab, die Aktien kommen ins Depot. Im Hintergrund dauert die Abwicklung meist zwei Börsentage.\nLina sieht den Verkäufer nie. [[Die Börse sorgt dafür, dass jeder Kauf und Verkauf sicher abgewickelt wird.]]" },
+      { titel: "Zwei Preise: Geld und Brief", bild: "↔️",
+        text: "Für eine Aktie gibt es im Handel immer zwei Preise:\n• Der **Briefkurs** ist der niedrigste Preis, zu dem gerade jemand verkaufen will. [[Wer kauft, zahlt den Briefkurs.]]\n• Der **Geldkurs** ist der höchste Preis, den gerade jemand zahlen will. Wer verkauft, bekommt den Geldkurs.\nDer Unterschied heißt **Spread**. Beispiel: Geld 49,90 €, Brief 50,10 €. Der Spread beträgt 0,20 €.\nKauft Ben und verkauft sofort wieder, verliert er 0,20 € pro Aktie, obwohl sich nichts bewegt hat. Dazu kommen die Gebühren.",
+        profi: "Bei großen, viel gehandelten Aktien ist der Spread winzig, oft nur ein paar Cent. Bei kleinen Firmen, die selten gehandelt werden, kann er mehrere Prozent betragen. Fachleute sagen: Die Aktie hat wenig **Liquidität**." },
+      { titel: "Bestens oder mit Limit?", bild: "🎛️",
+        text: "Bei einer Order kannst du wählen:\n• **Ohne Limit** („bestens“ beim Verkaufen, „billigst“ beim Kaufen): Die Order wird sofort zum nächsten möglichen Preis ausgeführt. Bewegt sich der Kurs gerade schnell, kann der Preis überraschend schlecht sein.\n• **Mit Limit**: Du legst eine Grenze fest. Beim Kauf ist das der Preis, den du **höchstens** zahlen willst, beim Verkauf der Preis, den du **mindestens** bekommen willst.\nBeispiel: Ben setzt ein Kauflimit von 50 €. Steht der Briefkurs bei 50,40 €, passiert erst einmal nichts. Fällt er auf 50 € oder darunter, wird gekauft.\n[[Ein Limit schützt vor bösen Überraschungen, aber vielleicht wird die Order nie ausgeführt.]]",
+        profi: "Eine **Stop-Loss-Order** ist ein automatischer Verkaufsauftrag: „Verkaufe, falls der Kurs unter 40 € fällt.“ Sie soll größere Verluste begrenzen. Bei sehr schnellen Kursstürzen kann der Verkauf aber deutlich unter 40 € stattfinden." },
+      { titel: "Wo und wann gehandelt wird", bild: "🕰️",
+        text: "Die gleiche Aktie kann an mehreren **Handelsplätzen** gehandelt werden: auf Xetra, an Regionalbörsen wie in Hamburg oder Stuttgart, und an Handelsplätzen, mit denen viele Online-Broker zusammenarbeiten. Manche davon haben bis spät abends geöffnet.\nAm meisten los ist, während die Hauptbörse geöffnet hat: für deutsche Aktien auf Xetra von 9 bis 17:30 Uhr, für US-Aktien in New York ab 15:30 Uhr deutscher Zeit.\n[[Wenn viel gehandelt wird, ist der Spread meist klein und der Preis fair.]] Abends oder am Wochenende sind die Spreads oft größer." },
+      { titel: "Was ein Handel wirklich kostet", bild: "🧾",
+        text: "Ben kauft 10 Aktien zum Briefkurs von 50,10 € und zahlt 1 € Ordergebühr: 10 × 50,10 € + 1 € = 502 €.\nWenn er wieder verkauft, zahlt er noch einmal 1 € Gebühr. Damit er ohne Verlust herauskommt, muss er beim Verkauf 503 € einnehmen, also 50,30 € pro Aktie bekommen.\nDer Geldkurs muss also von 49,90 € auf 50,30 € steigen, bevor Ben überhaupt im Plus ist.\n[[Jeder Kauf und Verkauf kostet: Gebühr und Spread. Wer ständig handelt, verliert dadurch viel Geld.]]" },
+      { titel: "Im Börsen-Club ist es einfacher", bild: "🎮",
+        text: "Im Börsen-Club ist manches vereinfacht, damit du dich auf das Wichtige konzentrieren kannst:\n• Es gibt nur **einen Preis**, den letzten Kurs, und keinen Spread.\n• Du kannst **jederzeit** handeln, auch nachts. Gehandelt wird zum letzten bekannten Kurs.\n• Jede Order wird **sofort** ausgeführt, Limits gibt es nicht.\n• Die Gebühr von 1 € gibt es dagegen genau wie im echten Leben.\nWenn du später echte Aktien kaufst, denk an diese Lektion: Schau dir Geld- und Briefkurs an, handle zu normalen Börsenzeiten und überleg dir ein Limit." }
+    ],
+    ausprobieren: "Schau dir mit deinen Eltern auf der Internetseite einer Börse oder einer Finanzseite eine große Aktie wie Siemens und eine kleine Aktie an. Wie hoch sind Geld- und Briefkurs? Wie groß ist der Spread in Cent und in Prozent?",
+    quiz: [
+      { frage: "Geldkurs 24,90 €, Briefkurs 25,10 €. Zu welchem Preis kaufst du?", optionen: ["25,10 €, den Briefkurs", "24,90 €, den Geldkurs", "25,00 €, die Mitte"], richtig: 0, erklaerung: "Wer kauft, zahlt den Briefkurs, also den Preis, zu dem jemand verkaufen will." },
+      { frage: "Geldkurs 24,90 €, Briefkurs 25,10 €. Wie groß ist der Spread?", zahl: 0.2, einheit: "€", erklaerung: "25,10 € − 24,90 € = 0,20 €." },
+      { frage: "Was bedeutet ein Kauflimit von 30 €?", optionen: ["Du kaufst nur, wenn du höchstens 30 € zahlen musst", "Du kaufst auf jeden Fall, egal zu welchem Preis", "Du kaufst genau 30 Aktien"], richtig: 0, erklaerung: "Ein Kauflimit ist die Obergrenze. Ist die Aktie teurer, wird die Order nicht ausgeführt." },
+      { frage: "Welches Risiko hat eine Order ohne Limit?", optionen: ["Bewegt sich der Kurs gerade schnell, kann der Preis viel schlechter sein als gedacht", "Sie wird nie ausgeführt", "Sie kostet doppelte Gebühr"], richtig: 0, erklaerung: "Ohne Limit wird zum nächsten möglichen Preis gehandelt, auch wenn er gerade ungünstig ist." },
+      { frage: "Ben kauft 10 Aktien zu je 20 € und zahlt 1 € Gebühr. Beim Verkauf zahlt er wieder 1 €. Zu welchem Preis pro Aktie muss er mindestens verkaufen, um keinen Verlust zu machen?", zahl: 20.2, einheit: "€", erklaerung: "Kauf: 10 × 20 € + 1 € = 201 €. Beim Verkauf braucht er 201 € + 1 € = 202 €. 202 € ÷ 10 = 20,20 € pro Aktie." },
+      { frage: "Bei welcher Aktie ist der Spread meist am größten?", optionen: ["Bei einer kleinen Firma, deren Aktie selten gehandelt wird", "Bei einer großen DAX-Firma", "Der Spread ist immer gleich"], richtig: 0, erklaerung: "Wo wenig gehandelt wird, liegen Käufer und Verkäufer oft weit auseinander. Fachleute sagen: wenig Liquidität." },
+      { frage: "Was ist im Börsen-Club anders als beim echten Handel?", optionen: ["Es gibt nur einen Preis ohne Spread, und jede Order wird sofort ausgeführt", "Im Börsen-Club gibt es keine Gebühren", "Im Börsen-Club kann man nur nachts handeln"], richtig: 0, erklaerung: "Der Börsen-Club vereinfacht: kein Spread, keine Limits, Handel rund um die Uhr. Die Gebühr von 1 € gibt es aber." }
+    ]
+  },
+
+  { id: "rendite", modul: 3, titel: "Kaufpreis, Zeit und Rendite", emoji: "📐", dauer: 14,
+    einleitung: "Wie viel bringt eine Aktie eigentlich? Hier lernst du, wie man Rendite ausrechnet, warum der Kaufpreis so viel ausmacht und warum Verluste schwerer aufzuholen sind, als man denkt.",
+    karten: [
+      { titel: "Was ist Rendite?", bild: "📐",
+        text: "**Rendite** ist der Gewinn, den eine Geldanlage bringt, in Prozent vom eingesetzten Geld.\n[[Rendite = (Endwert − Einsatz) ÷ Einsatz × 100]]\nBen kauft Aktien für 500 € und verkauft sie für 600 €. Gewinn 100 €. Rendite: 100 € ÷ 500 € × 100 = 20 %.\nWarum in Prozent? Lina macht 100 € Gewinn mit 1.000 € Einsatz, das sind 10 %. Mila macht 50 € Gewinn mit nur 100 € Einsatz, das sind 50 %. Mila hat weniger Euro gewonnen, ihr Geld aber viel besser vermehrt.\nWoher kommt die Rendite überhaupt? Auf lange Sicht daraus, dass Firmen Gewinne machen, wachsen und einen Teil davon ausschütten." },
+      { titel: "Der Kaufpreis macht den Unterschied", bild: "🎯",
+        text: "Lina, Ben und Mila kaufen dieselbe Aktie, aber zu verschiedenen Zeiten:\n• Lina im Frühling für 40 €\n• Ben im Sommer für 50 €\n• Mila im Herbst für 60 €\nHeute steht die Aktie bei 55 €. Gleiche Aktie, ganz verschiedene Ergebnisse:\n• Lina: 15 € ÷ 40 € = **+37,5 %**\n• Ben: 5 € ÷ 50 € = **+10 %**\n• Mila: −5 € ÷ 60 € ≈ **−8,3 %**\n[[Nicht nur was du kaufst zählt, sondern auch zu welchem Preis.]] Das Dumme ist: Ob ein Preis günstig war, weiß man immer erst hinterher." },
+      { titel: "Kursgewinn plus Dividende", bild: "➕",
+        text: "Eine Aktie kann auf zwei Wegen Rendite bringen: durch einen **steigenden Kurs** und durch **Dividenden**. Zusammen nennt man das **Gesamtrendite**.\nBeispiel: Oma Rosi kauft eine Aktie für 50 €. Nach einem Jahr steht sie bei 53 €, und es gab 2 € Dividende.\nKursgewinn 3 € + Dividende 2 € = 5 €. Gesamtrendite: 5 € ÷ 50 € × 100 = [[10 %]].\nWer nur auf den Kurs schaut, unterschätzt Aktien, die viel ausschütten. Im Börsen-Club zählt nur der Kurs, weil keine Dividenden gutgeschrieben werden.",
+        profi: "Im echten Leben gehen von der Rendite noch **Gebühren** und **Steuern** ab. Fachleute unterscheiden deshalb zwischen der Rendite vor und nach Kosten. Bei kleinen Beträgen und häufigem Handeln kann der Unterschied groß sein." },
+      { titel: "Zeit: Rendite pro Jahr", bild: "⏳",
+        text: "Lina hat in 10 Jahren 100 % Gewinn gemacht, ihr Geld hat sich verdoppelt. Ben hat in 2 Jahren 30 % Gewinn gemacht. Wer war besser?\nUm das fair zu vergleichen, rechnet man die **Rendite pro Jahr** aus. Wegen des Zinseszinses teilt man dafür nicht einfach durch die Jahre:\n• Lina: etwa **7 % pro Jahr** (100 € × 1,07 zehnmal hintereinander ergibt etwa 197 €).\n• Ben: etwa **14 % pro Jahr** (100 € × 1,14 × 1,14 ≈ 130 €).\n[[Ben war schneller, Lina hatte mehr Geduld.]] Über lange Zeit kann auch eine kleinere Rendite pro Jahr zu viel Geld werden. Mehr dazu in der Lektion über Zeit und Zinseszins." },
+      { titel: "Verluste sind schwer aufzuholen", bild: "🧗",
+        text: "Eine Aktie fällt von 100 € auf 50 €, also um 50 %. Wie viel muss sie wieder steigen, damit man bei 100 € ist? Nicht 50 %, sondern **100 %**, denn von 50 € aus muss sie sich verdoppeln.\nWeitere Beispiele:\n• −20 % braucht danach +25 %: 100 € → 80 € → 100 €.\n• −10 % braucht danach etwa +11 %.\n• −90 % braucht danach +900 %.\n[[Je größer der Verlust, desto schwerer wird der Weg zurück.]] Deshalb ist es so wichtig, nicht alles auf eine Firma zu setzen." },
+      { titel: "Mehrmals kaufen: der Durchschnittspreis", bild: "🧮",
+        text: "Viele kaufen nicht alles auf einmal, sondern nach und nach. Dann zählt der **Durchschnittspreis**.\nBen kauft 2 Aktien für 40 € und später 2 Aktien für 60 €. Er hat 200 € für 4 Aktien bezahlt, also 50 € pro Stück.\nBei einem **Sparplan** zahlt man jeden Monat denselben Betrag ein. Mila spart 60 € im Monat: Im ersten Monat kostet die Aktie 30 €, sie bekommt 2 Stück. Im zweiten kostet sie 60 €, sie bekommt 1 Stück. 120 € für 3 Stück, das sind 40 € pro Stück.\n[[Bei niedrigen Kursen bekommt man automatisch mehr Stücke, bei hohen weniger.]] Das ist kein Zaubertrick und garantiert keinen Gewinn, nimmt aber die Sorge, den falschen Moment zu erwischen." }
+    ],
+    ausprobieren: "Schau in deinem Musterdepot nach: Zu welchem Preis hast du deine Aktien gekauft, und wo stehen sie heute? Rechne für jede die Rendite in Prozent aus. Wie viel Prozent müsste deine schlechteste Aktie steigen, damit du wieder bei null bist?",
+    quiz: [
+      { frage: "Lina kauft eine Aktie für 80 € und verkauft sie für 100 €. Wie hoch ist ihre Rendite?", zahl: 25, einheit: "%", erklaerung: "Gewinn 20 €. 20 € ÷ 80 € × 100 = 25 %." },
+      { frage: "Eine Aktie steht heute bei 30 €. Ben hat sie für 24 € gekauft, Mila für 40 €. Wie hoch ist Bens Rendite?", zahl: 25, einheit: "%", erklaerung: "Ben: 6 € Gewinn ÷ 24 € × 100 = 25 %. Mila liegt dagegen mit 10 € ÷ 40 € = 25 % im Minus." },
+      { frage: "Oma Rosi kauft eine Aktie für 40 €. Ein Jahr später steht sie bei 42 €, und es gab 2 € Dividende. Wie hoch ist die Gesamtrendite?", zahl: 10, einheit: "%", erklaerung: "Kursgewinn 2 € + Dividende 2 € = 4 €. 4 € ÷ 40 € × 100 = 10 %." },
+      { frage: "Eine Aktie fällt um 20 %. Um wie viel Prozent muss sie danach steigen, um wieder auf dem alten Stand zu sein?", zahl: 25, einheit: "%", erklaerung: "100 € → 80 €. Von 80 € auf 100 € fehlen 20 €, und 20 € ÷ 80 € = 25 %." },
+      { frage: "Eine Aktie fällt um 50 %. Wie viel Prozent muss sie danach steigen, um den Verlust aufzuholen?", zahl: 100, einheit: "%", erklaerung: "Von 100 € auf 50 € und zurück auf 100 €: Der Kurs muss sich verdoppeln, also um 100 % steigen." },
+      { frage: "Ben kauft 3 Aktien für je 20 € und später 1 Aktie für 40 €. Wie hoch ist sein Durchschnittspreis?", zahl: 25, einheit: "€", erklaerung: "3 × 20 € + 40 € = 100 € für 4 Aktien. 100 € ÷ 4 = 25 € pro Aktie." },
+      { frage: "Warum vergleicht man Renditen am besten pro Jahr?", optionen: ["Weil 30 % in 2 Jahren viel mehr ist als 30 % in 20 Jahren", "Weil Aktien nur einmal im Jahr einen Kurs haben", "Weil es sonst keine Dividenden gibt"], richtig: 0, erklaerung: "Erst die Rendite pro Jahr zeigt, wie schnell sich das Geld vermehrt hat." }
+    ]
+  },
+
+  { id: "risiko", modul: 4, titel: "Risiko und Streuen", emoji: "🛡️", dauer: 12,
     einleitung: "Kurse können fallen, auch stark. Hier lernst du, wie man das Risiko verteilt.",
     karten: [
       { titel: "Kurse können fallen", bild: "📉",
@@ -397,7 +516,7 @@ BC.lektionen = [
     ]
   },
 
-  { id: "etf", modul: 3, titel: "Fonds, Index und ETF", emoji: "🧺", dauer: 12,
+  { id: "etf", modul: 4, titel: "Fonds, Index und ETF", emoji: "🧺", dauer: 12,
     einleitung: "Wie man mit einem einzigen Kauf an Hunderten von Firmen beteiligt sein kann.",
     karten: [
       { titel: "Ein Index ist eine Liste", bild: "📋",
@@ -425,7 +544,7 @@ BC.lektionen = [
     ]
   },
 
-  { id: "geld", modul: 3, titel: "Geld, Zinsen und Inflation", emoji: "🏦", dauer: 12,
+  { id: "geld", modul: 4, titel: "Geld, Zinsen und Inflation", emoji: "🏦", dauer: 12,
     einleitung: "Was machen Banken mit dem Geld, warum gibt es Zinsen, und warum wird ein Eis mit den Jahren teurer?",
     karten: [
       { titel: "Was Banken machen", bild: "🏦",
@@ -456,7 +575,7 @@ BC.lektionen = [
     ]
   },
 
-  { id: "zeit", modul: 3, titel: "Zeit und Zinseszins", emoji: "⛄", dauer: 12,
+  { id: "zeit", modul: 4, titel: "Zeit und Zinseszins", emoji: "⛄", dauer: 12,
     einleitung: "Warum Geduld an der Börse so wichtig ist, und was ein Schneeball damit zu tun hat.",
     karten: [
       { titel: "Der Schneeball-Effekt", bild: "⛄",
@@ -483,7 +602,7 @@ BC.lektionen = [
     ]
   },
 
-  { id: "gefuehle", modul: 3, titel: "Gefühle an der Börse", emoji: "🎭", dauer: 10,
+  { id: "gefuehle", modul: 4, titel: "Gefühle an der Börse", emoji: "🎭", dauer: 10,
     einleitung: "An der Börse ist dein größter Gegner manchmal dein eigener Kopf.",
     karten: [
       { titel: "Gier und Angst", bild: "😬",
@@ -509,7 +628,7 @@ BC.lektionen = [
     ]
   },
 
-  { id: "beteiligen", modul: 3, titel: "Wie kann ich mich an Firmen beteiligen?", emoji: "🤝", dauer: 12,
+  { id: "beteiligen", modul: 4, titel: "Wie kann ich mich an Firmen beteiligen?", emoji: "🤝", dauer: 12,
     einleitung: "Der Börsen-Club ist ein Spiel. Hier erfährst du, wie man im echten Leben Miteigentümer von Firmen werden kann und worauf man dabei achten sollte.",
     karten: [
       { titel: "Depot und Junior-Depot", bild: "🗂️",
@@ -538,12 +657,12 @@ BC.lektionen = [
     ]
   },
 
-  { id: "fuehrerschein", modul: 3, titel: "Börsen-Führerschein", emoji: "🎓", dauer: 20,
-    abschluss: true, bestehen: 18,
+  { id: "fuehrerschein", modul: 4, titel: "Börsen-Führerschein", emoji: "🎓", dauer: 20,
+    abschluss: true, bestehen: 20,
     einleitung: "Zeig, was du gelernt hast: Hier ist die Abschlussprüfung des Börsen-Clubs.",
     karten: [
       { titel: "So geht's", bild: "📝",
-        text: "Dich erwarten 22 Fragen aus allen Lektionen, darunter einige Rechenaufgaben. Sie sind etwas kniffliger als in den einzelnen Lektionen. Nimm dir Zeit, rechne in Ruhe und leg dir einen Zettel bereit.\n[[Ab 18 richtigen Antworten hast du bestanden]] und bekommst deinen Börsen-Führerschein. Klappt es noch nicht, schau dir die Lektionen noch einmal an und versuch es dann erneut. Viel Erfolg!" }
+        text: "Dich erwarten 25 Fragen aus allen Lektionen, darunter einige Rechenaufgaben. Sie sind etwas kniffliger als in den einzelnen Lektionen. Nimm dir Zeit, rechne in Ruhe und leg dir einen Zettel bereit.\n[[Ab 20 richtigen Antworten hast du bestanden]] und bekommst deinen Börsen-Führerschein. Klappt es noch nicht, schau dir die Lektionen noch einmal an und versuch es dann erneut. Viel Erfolg!" }
     ],
     quiz: [
       { frage: "Was besitzt du, wenn du eine Aktie kaufst?", optionen: ["Einen kleinen Anteil an einem Unternehmen", "Ein Recht auf feste Zinsen", "Einen Gutschein für die Produkte der Firma"], richtig: 0, erklaerung: "Mit einer Aktie wirst du Miteigentümer. Feste Zinsen gibt es bei einem Kredit, nicht bei einer Aktie." },
@@ -567,6 +686,9 @@ BC.lektionen = [
       { frage: "Ein Einkauf kostet heute 200 €. Die Preise steigen in einem Jahr um 5 %. Wie viel kostet derselbe Einkauf dann?", zahl: 210, einheit: "€", erklaerung: "5 % von 200 € sind 10 €. 200 € + 10 € = 210 €. Für dasselbe Geld bekommst du also weniger: Das ist Inflation." },
       { frage: "Eine Firma macht 200.000 € Umsatz. Material kostet 80.000 €, Personal 70.000 €, sonstige Kosten 20.000 € und Abschreibungen 10.000 €. Wie hoch ist der operative Gewinn?", zahl: 20000, einheit: "€", erklaerung: "200.000 € − 80.000 € − 70.000 € − 20.000 € − 10.000 € = 20.000 €. Davon gehen noch Zinsen und Steuern ab." },
       { frage: "Ein Aktionär besitzt mehr als die Hälfte der Stimmen einer AG. Was kann er auf der Hauptversammlung meist allein entscheiden?", optionen: ["Wer als Vertreter der Aktionäre im Aufsichtsrat sitzt, der wiederum den Vorstand bestimmt", "Gar nichts, alle Aktionäre haben gleich viel zu sagen", "Wie hoch der Aktienkurs morgen ist"], richtig: 0, erklaerung: "Mit der Mehrheit der Stimmen kann man viele Beschlüsse allein fassen, etwa die Wahl der Aktionärsvertreter im Aufsichtsrat. Den Kurs bestimmt aber der Markt." },
+      { frage: "Geldkurs 9,80 €, Briefkurs 10,00 €. Du kaufst und verkaufst sofort wieder 50 Aktien. Wie viel Euro verlierst du allein durch den Spread?", zahl: 10, einheit: "€", erklaerung: "Der Spread beträgt 0,20 € pro Aktie. 50 × 0,20 € = 10 €, ohne dass sich der Kurs bewegt hat. Dazu kämen noch die Gebühren." },
+      { frage: "Mila hat eine Aktie für 50 € gekauft. Sie fällt auf 40 €. Um wie viel Prozent muss sie wieder steigen, damit Mila bei null ist?", zahl: 25, einheit: "%", erklaerung: "Von 40 € auf 50 € fehlen 10 €. 10 € ÷ 40 € × 100 = 25 %, obwohl der Verlust nur 20 % war." },
+      { frage: "Eine Firma hat 10 Millionen Aktien und verdient 20 Mio. €. Sie kauft 2 Millionen eigene Aktien zurück und zieht sie ein. Wie hoch ist danach der Gewinn pro Aktie, wenn sie wieder 20 Mio. € verdient?", zahl: 2.5, einheit: "€", erklaerung: "Danach gibt es 8 Millionen Aktien. 20.000.000 € ÷ 8.000.000 = 2,50 €. Vorher waren es 2 € pro Aktie." },
       { frage: "Eine 14-Jährige möchte mit echtem Geld Aktien besitzen. Wie geht das?", optionen: ["Ihre Eltern eröffnen für sie ein Junior-Depot und entscheiden mit", "Sie eröffnet allein ein Depot per App", "Gar nicht, Aktien darf man erst ab 18 besitzen"], richtig: 0, erklaerung: "Unter 18 geht ein echtes Depot nur als Junior-Depot, das die Eltern eröffnen und verwalten. Das Geld darin gehört aber dem Kind." }
     ]
   }
