@@ -4,7 +4,7 @@ window.BC = BC;
 
 BC.module = [
   { nr: 1, titel: "Wirtschaft, Unternehmen und Aktien", emoji: "🏭" },
-  { nr: 2, titel: "Wie Unternehmen Geld verdienen", emoji: "💶" },
+  { nr: 2, titel: "Wie Unternehmen Geld verdienen und wem sie gehören", emoji: "💶" },
   { nr: 3, titel: "Klug anlegen", emoji: "🧠" }
 ];
 
@@ -219,6 +219,39 @@ BC.lektionen = [
     ]
   },
 
+  { id: "guv", modul: 2, titel: "Vom Umsatz zum Gewinn: die Jahresrechnung", emoji: "📊", dauer: 14,
+    einleitung: "Limonadenstand und Pizzeria kennst du schon. Jetzt rechnen wir ein ganzes Jahr einer echten Firma durch: Woher kommt das Geld, wofür geht es weg, und was bleibt am Ende übrig?",
+    karten: [
+      { titel: "Wie entsteht Umsatz?", bild: "🛒",
+        text: "Umsatz entsteht immer dann, wenn **Kunden** für etwas bezahlen. Eine Firma braucht also etwas, das andere haben wollen, und muss es zu ihnen bringen: über eigene Läden, Händler, einen Online-Shop oder Verkäufer, die Firmenkunden besuchen.\nDie erfundene **Speichenwerk AG** verkauft in einem Jahr 20.000 E-Bikes zu je 2.400 €. Das sind 48 Millionen €. Dazu kommen 2 Millionen € für Ersatzteile und Reparaturen in eigenen Werkstätten.\n[[Umsatz: 48 Mio. € + 2 Mio. € = 50 Mio. €]]\nViele Firmen haben so mehrere Umsatzquellen. Wichtig ist: Umsatz ist noch lange kein Gewinn.",
+        profi: "Umsatz zählt, sobald verkauft und geliefert ist, auch wenn der Kunde erst später bezahlt. Bei Firmenkunden sind 30 Tage Zahlungsziel üblich. Bis dahin hat die Firma eine **Forderung**, aber noch kein Geld auf dem Konto. Deshalb kann eine Firma Gewinn machen und trotzdem knapp bei Kasse sein." },
+      { titel: "Material und Wareneinsatz", bild: "🔩",
+        text: "Für jedes E-Bike kauft Speichenwerk bei **Lieferanten** ein: Rahmen, Motor, Akku, Bremsen, Reifen, Verpackung. Pro Rad sind das 1.200 €, für 20.000 Räder also 24 Millionen €. Das sind die **Materialkosten**.\nZieht man sie vom Umsatz ab, bleibt der **Rohertrag**: 50 Mio. € − 24 Mio. € = 26 Mio. €.\nEin Händler, der fertige Ware einkauft und weiterverkauft, nennt das **Wareneinsatz**. Ein Supermarkt kauft zum Beispiel Joghurt beim Hersteller und verkauft ihn teurer weiter.\n[[Vom Rohertrag müssen alle anderen Kosten bezahlt werden.]]" },
+      { titel: "Personalkosten", bild: "👷",
+        text: "Bei Speichenwerk arbeiten 300 Menschen: in der Montage, in der Entwicklung, im Verkauf, in der Werkstatt und in der Buchhaltung. Sie bekommen **Lohn** oder **Gehalt**.\nDazu kommt etwas, das viele nicht wissen: Die Firma zahlt zusätzlich zum Gehalt **Sozialabgaben**, also Beiträge zur Renten-, Kranken-, Pflege- und Arbeitslosenversicherung ihrer Beschäftigten. In Deutschland ist das etwa ein Fünftel obendrauf.\nIm Durchschnitt kostet jeder Arbeitsplatz Speichenwerk 50.000 € im Jahr. Bei 300 Menschen: 300 × 50.000 € = [[15 Mio. € Personalkosten]]. Bei vielen Firmen sind das die größten Kosten überhaupt." },
+      { titel: "Miete, Strom, Werbung und mehr", bild: "💡",
+        text: "Eine Firma hat noch viele weitere Kosten. Fachleute nennen sie **sonstige betriebliche Kosten**. Bei Speichenwerk im Jahr:\n• Miete für Halle und Büros, Strom und Heizung: 2 Mio. €\n• Werbung, Messen und Versand zu den Händlern: 2 Mio. €\n• Versicherungen, Computer, Software, Beratung und vieles mehr: 1 Mio. €\nZusammen: [[5 Mio. €]].\nForschung für bessere Akkus steckt zum großen Teil in den Gehältern der Entwicklerinnen und Entwickler. Auch sie kostet Geld, bevor sie irgendwann Umsatz bringt." },
+      { titel: "Abschreibungen: Maschinen nutzen sich ab", bild: "⚙️",
+        text: "Speichenwerk hat vor ein paar Jahren eine Lackieranlage für 1 Million € gekauft. Sie hält etwa 10 Jahre. Wäre es fair, die ganze Million nur dem Jahr des Kaufs anzurechnen? Nein, denn die Anlage arbeitet ja 10 Jahre lang.\nDeshalb verteilt man den Preis auf die Jahre der Nutzung: 1.000.000 € ÷ 10 Jahre = 100.000 € pro Jahr. Das nennt man **Abschreibung**.\nRechnet man alle Maschinen, Werkzeuge, Lieferwagen und Gebäude zusammen, kommt Speichenwerk auf [[1,5 Mio. € Abschreibungen]] im Jahr.",
+        profi: "Abschreibungen sind Kosten, für die in diesem Jahr kein Geld mehr das Konto verlässt, denn bezahlt wurde schon beim Kauf. Deshalb schauen Fachleute neben dem Gewinn auch auf den **Cashflow**, also darauf, wie viel Geld tatsächlich herein- und hinausgeflossen ist." },
+      { titel: "Zinsen, Steuern und was übrig bleibt", bild: "🧾",
+        text: "Jetzt rechnen wir alles zusammen:\nUmsatz 50 Mio. € − Material 24 − Personal 15 − sonstige Kosten 5 − Abschreibungen 1,5 = **4,5 Mio. € operativer Gewinn**. So viel verdient die Firma mit ihrem eigentlichen Geschäft.\nSpeichenwerk hat einen Kredit und zahlt 0,2 Mio. € **Zinsen**. Bleiben 4,3 Mio. € Gewinn vor Steuern.\nAuf Gewinne zahlen Firmen in Deutschland zusammen rund 30 % **Steuern**, hier 1,3 Mio. €.\n[[Am Ende bleiben 3 Mio. € Jahresüberschuss.]] Von 50 Mio. € Umsatz sind das nur 6 %.",
+        profi: "Diese ganze Rechnung heißt **Gewinn- und Verlustrechnung**, kurz GuV. Jede AG muss sie jedes Jahr veröffentlichen. Den operativen Gewinn vor Zinsen und Steuern nennen Fachleute oft **EBIT** (englisch „Earnings Before Interest and Taxes“)." },
+      { titel: "Wohin geht der Gewinn?", bild: "🔀",
+        text: "Die 3 Mio. € Gewinn gehören den Eigentümern, bei einer AG also den Aktionären. Was damit passiert, beschließt die **Hauptversammlung** auf Vorschlag von Vorstand und Aufsichtsrat.\nSpeichenwerk hat 1 Million Aktien. Die Hauptversammlung beschließt 1 € **Dividende** pro Aktie, also 1 Mio. € werden ausgezahlt.\nDie anderen 2 Mio. € bleiben in der Firma. Damit kann sie zum Beispiel eine neue Montagehalle bauen oder Schulden zurückzahlen.\n[[Auch der Gewinn, der in der Firma bleibt, gehört den Aktionären. Er macht ihre Firma wertvoller.]]" }
+    ],
+    ausprobieren: "Nimm einen Laden, den du gut kennst, zum Beispiel deine Lieblings-Eisdiele. Schreib auf, woher ihr Umsatz kommt und welche Kosten sie hat: Material, Personal, Miete, Strom, Abschreibungen auf Eismaschine und Theke. Schätzt gemeinsam: Was bleibt von einer Kugel Eis wohl als Gewinn übrig?",
+    quiz: [
+      { frage: "Ein Fahrradladen verkauft in einem Monat 40 Räder zu je 600 € und nimmt 2.000 € für Reparaturen ein. Wie hoch ist sein Umsatz?", zahl: 26000, einheit: "€", erklaerung: "40 × 600 € = 24.000 € für die Räder, dazu 2.000 € für Reparaturen. Umsatz: 26.000 €." },
+      { frage: "Was gehört zu den Personalkosten einer Firma?", optionen: ["Die Gehälter und die Beiträge der Firma zur Sozialversicherung der Beschäftigten", "Die Akkus, die sie beim Lieferanten kauft", "Die Miete für die Fabrikhalle"], richtig: 0, erklaerung: "Zu den Personalkosten zählen Löhne und Gehälter und die Sozialabgaben, die die Firma zusätzlich zahlt. Akkus sind Materialkosten, die Miete gehört zu den sonstigen Kosten." },
+      { frage: "Eine Bäckerei kauft einen Lieferwagen für 40.000 €. Er soll 8 Jahre halten. Wie hoch ist die Abschreibung pro Jahr?", zahl: 5000, einheit: "€", erklaerung: "40.000 € ÷ 8 Jahre = 5.000 € pro Jahr. So verteilt man den Preis auf die Jahre, in denen der Wagen genutzt wird." },
+      { frage: "Eine Firma hat 100.000 € Umsatz. Material kostet 40.000 €, Personal 35.000 €, sonstige Kosten 10.000 €, Abschreibungen 5.000 €. Wie hoch ist der operative Gewinn?", zahl: 10000, einheit: "€", erklaerung: "100.000 € − 40.000 € − 35.000 € − 10.000 € − 5.000 € = 10.000 €." },
+      { frage: "Eine Firma hat 10.000 € Gewinn vor Steuern und zahlt darauf 30 % Steuern. Wie viel Gewinn bleibt übrig?", zahl: 7000, einheit: "€", erklaerung: "30 % von 10.000 € sind 3.000 € Steuern. 10.000 € − 3.000 € = 7.000 €." },
+      { frage: "Ein Supermarkt hat einen riesigen Umsatz. Heißt das, er verdient sehr viel?", optionen: ["Nicht unbedingt: Bei Supermärkten bleibt von jedem Euro Umsatz oft nur wenig als Gewinn übrig", "Ja, Umsatz und Gewinn sind dasselbe", "Ja, denn Supermärkte haben keine Kosten"], richtig: 0, erklaerung: "Umsatz ist nicht Gewinn. Ein Supermarkt muss Waren, Personal, Miete und Strom bezahlen. Am Ende bleiben oft nur wenige Cent pro Euro Umsatz." },
+      { frage: "Eine AG mit 2 Millionen Aktien zahlt insgesamt 3 Millionen € Dividende aus. Wie viel Dividende gibt es pro Aktie?", zahl: 1.5, einheit: "€", erklaerung: "3.000.000 € ÷ 2.000.000 Aktien = 1,50 € pro Aktie." }
+    ]
+  },
+
   { id: "geschaeftsmodell", modul: 2, titel: "Wie machen Unternehmen Gewinn?", emoji: "🧩", dauer: 10,
     einleitung: "Nicht jede Firma verdient ihr Geld auf dieselbe Art. Hier lernst du die wichtigsten Geschäftsmodelle kennen.",
     karten: [
@@ -246,6 +279,35 @@ BC.lektionen = [
       { frage: "Ein Streaming-Dienst hat 1.000 Kunden, die jeden Monat 10 € zahlen. Wie viel Umsatz macht er in einem Jahr?", zahl: 120000, einheit: "€", erklaerung: "1.000 × 10 € = 10.000 € pro Monat. 10.000 € × 12 Monate = 120.000 €." },
       { frage: "Die Pizzeria kauft ihren Käse günstiger ein, verkauft aber genauso viele Pizzen zum selben Preis. Welchen Hebel nutzt sie?", optionen: ["Kosten senken", "Mehr verkaufen", "Höhere Preise"], richtig: 0, erklaerung: "Menge und Preis bleiben gleich, nur die Kosten sinken. Dadurch steigt der Gewinn." },
       { frage: "Warum ist eine starke Marke für eine Firma wertvoll?", optionen: ["Viele Kunden kaufen immer wieder bei ihr, auch wenn es etwas mehr kostet", "Sie muss dann keine Steuern zahlen", "Sie hat dann nie mehr Konkurrenz"], richtig: 0, erklaerung: "Eine bekannte, beliebte Marke sorgt für treue Kunden. Konkurrenz gibt es trotzdem." }
+    ]
+  },
+
+  { id: "eigentuemer", modul: 2, titel: "Wem gehören die Unternehmen?", emoji: "🔑", dauer: 12,
+    einleitung: "Der Gewinn gehört den Aktionären. Aber wer sind diese Aktionäre eigentlich? Hier lernst du die typischen Eigentümer großer Firmen kennen und wer in einer AG das Sagen hat.",
+    karten: [
+      { titel: "Gründer und Familien", bild: "👨‍👩‍👧",
+        text: "Viele große Firmen gehören bis heute zu einem großen Teil den Familien, die sie gegründet oder groß gemacht haben. Sie halten ihre Aktien oft über Jahrzehnte und denken in Generationen.\nZwei Beispiele aus dem Börsen-Club: Bei **BMW** gehört fast die Hälfte der Aktien zwei Geschwistern aus der Familie Quandt. Bei **Beiersdorf**, der Firma hinter Nivea, hält eine Holding der Familie Herz die Mehrheit. Beide Firmen sind trotzdem an der Börse, und jeder kann den Rest der Aktien kaufen.\n[[Ein großer Familienaktionär kann für Ruhe und lange Planung sorgen, hat aber auch viel Macht.]]" },
+      { titel: "Privatanleger wie du und Oma Rosi", bild: "👵",
+        text: "**Privatanleger** sind ganz normale Menschen, die mit ihrem eigenen Geld Aktien kaufen: eine Lehrerin, ein Rentner, Eltern für ihre Kinder. In Deutschland besitzen Millionen Menschen Aktien, Fonds oder ETFs.\nJeder Einzelne hat meist nur wenige Aktien einer Firma. Zusammen können Privatanleger aber einen großen Teil besitzen.\nEine besondere Gruppe sind **Mitarbeitende**, die Aktien ihrer eigenen Firma halten. Viele Firmen bieten sie ihnen günstiger an. So profitieren die Beschäftigten mit, wenn ihre Arbeit Erfolg hat." },
+      { titel: "Fonds und ETF-Anbieter", bild: "🧺",
+        text: "Die größten Aktionäre vieler Börsenfirmen sind heute **Fondsgesellschaften**. Sie sammeln Geld von Millionen Sparern ein und kaufen damit Aktien, zum Beispiel für einen ETF. Die größten heißen BlackRock und Vanguard und kommen aus den USA.\nWichtig: [[Das Geld gehört nicht dem Fondsanbieter, sondern den vielen Menschen, die Fondsanteile gekauft haben.]] Der Anbieter verwaltet es nur und bekommt dafür eine Gebühr.\nWer einen ETF auf einen großen Index besitzt, ist also über Umwege Miteigentümer von Hunderten Firmen." },
+      { titel: "Versicherungen und Rentenkassen", bild: "☂️",
+        text: "Auch **Versicherungen** besitzen viele Aktien. Sie bekommen jeden Monat Beiträge ihrer Kunden und müssen dieses Geld oft jahrzehntelang anlegen, bis sie zum Beispiel eine Lebensversicherung auszahlen.\nIn vielen Ländern, etwa in den USA, den Niederlanden oder der Schweiz, wird Geld für die spätere Rente in **Pensionsfonds** gesammelt. Diese legen einen Teil in Aktien an. Lehrer, Krankenpfleger und Bauarbeiter auf der ganzen Welt sind so ohne es zu merken Miteigentümer großer Firmen.\nVersicherungen, Fonds und Pensionsfonds nennt man zusammen **institutionelle Anleger**." },
+      { titel: "Staaten, Stiftungen und andere Firmen", bild: "🏛️",
+        text: "Auch **Staaten** sind Aktionäre. Deutschland besitzt über den Bund und die Förderbank KfW mehr als ein Viertel der **Deutschen Telekom**. Das Land Niedersachsen hält 20 % der Stimmrechte bei **Volkswagen**.\nNorwegen legt Einnahmen aus seinem Öl in einem **Staatsfonds** an. Er besitzt Aktien von Tausenden Firmen auf der ganzen Welt, zusammen über 1 % aller Börsenaktien.\n**Stiftungen** besitzen ebenfalls Firmen, etwa die Robert Bosch Stiftung den Großteil von Bosch.\nUnd **Firmen besitzen andere Firmen**: Die Porsche SE, hinter der die Familien Porsche und Piëch stehen, hält die Mehrheit der Stimmen bei Volkswagen." },
+      { titel: "Großaktionär oder Streubesitz: Wer hat das Sagen?", bild: "🗳️",
+        text: "Auf der Hauptversammlung gilt meist: eine Aktie, eine Stimme. Wer mehr als die Hälfte der Stimmen hat, kann viele Entscheidungen allein treffen, zum Beispiel die Vertreter der Aktionäre im Aufsichtsrat wählen, der dann den Vorstand bestimmt.\nAktien, die auf viele kleine Anleger verteilt sind, nennt man **Streubesitz**. Ist der Streubesitz groß, gibt es keinen einzelnen Herrscher, und die Firma muss viele Aktionäre überzeugen.\nBeispiel: Die Familie hat 40 %, der Staat 10 %. Dann sind 100 % − 40 % − 10 % = [[50 % Streubesitz]].",
+        profi: "Für besonders wichtige Beschlüsse, etwa eine Änderung der Satzung oder eine Kapitalerhöhung, braucht man in Deutschland meist eine Mehrheit von drei Vierteln der vertretenen Stimmen. Wer mehr als 25 % hat, kann solche Beschlüsse deshalb allein verhindern. Das nennt man **Sperrminorität**." }
+    ],
+    ausprobieren: "Sucht euch gemeinsam eine Firma aus dem Börsen-Club aus und findet im Internet auf ihrer Seite für Anleger (meist „Investor Relations“) heraus, wer die größten Aktionäre sind. Ist es eher eine Familie, der Staat, Fonds oder Streubesitz?",
+    quiz: [
+      { frage: "Wer sind heute die größten Aktionäre vieler großer Börsenfirmen?", optionen: ["Fondsgesellschaften, die das Geld vieler Sparer anlegen", "Die Vorstände der Firmen", "Die Börse selbst"], richtig: 0, erklaerung: "Fonds- und ETF-Anbieter halten oft die größten Pakete. Das Geld gehört aber den vielen Menschen, die ihre Fondsanteile gekauft haben." },
+      { frage: "Lina besitzt Anteile an einem ETF. Wem gehört das Geld darin?", optionen: ["Lina und den anderen Anlegern, der Anbieter verwaltet es nur", "Dem ETF-Anbieter", "Der Börse"], richtig: 0, erklaerung: "Der Anbieter verwaltet das Geld gegen eine Gebühr. Es gehört den Anlegern." },
+      { frage: "Was ist ein Pensionsfonds?", optionen: ["Ein Topf, in dem Geld für spätere Renten gesammelt und angelegt wird, oft auch in Aktien", "Eine Firma, die Hotels betreibt", "Ein Sparschwein der Firmenchefs"], richtig: 0, erklaerung: "Pensionsfonds legen Rentengeld an, damit es bis zur Rente wächst. Ein Teil steckt in Aktien." },
+      { frage: "Eine AG hat 10 Millionen Aktien. Einer Familie gehören 4,5 Millionen davon. Wie viel Prozent sind das?", zahl: 45, einheit: "%", erklaerung: "4,5 Millionen ÷ 10 Millionen = 0,45, also 45 %." },
+      { frage: "Was bedeutet Streubesitz?", optionen: ["Die Aktien sind auf viele kleine Anleger verteilt", "Die Aktien liegen verstreut in einem Tresor", "Die Firma hat Läden in vielen Ländern"], richtig: 0, erklaerung: "Streubesitz heißt: Viele Anleger mit jeweils kleinen Anteilen, kein einzelner Großaktionär." },
+      { frage: "Bei einer AG hält eine Stiftung 35 % und ein Staat 15 % der Aktien. Wie viel Prozent sind Streubesitz, wenn es keine weiteren Großaktionäre gibt?", zahl: 50, einheit: "%", erklaerung: "100 % − 35 % − 15 % = 50 %." },
+      { frage: "Profi-Frage: Ab welchem Anteil kann ein Aktionär in Deutschland eine Satzungsänderung allein verhindern?", optionen: ["Ab mehr als 25 % der Stimmen", "Ab 1 % der Stimmen", "Erst ab 90 % der Stimmen"], richtig: 0, erklaerung: "Satzungsänderungen brauchen meist drei Viertel der Stimmen. Wer mehr als ein Viertel hat, hat eine Sperrminorität." }
     ]
   },
 
@@ -477,11 +539,11 @@ BC.lektionen = [
   },
 
   { id: "fuehrerschein", modul: 3, titel: "Börsen-Führerschein", emoji: "🎓", dauer: 20,
-    abschluss: true, bestehen: 16,
+    abschluss: true, bestehen: 18,
     einleitung: "Zeig, was du gelernt hast: Hier ist die Abschlussprüfung des Börsen-Clubs.",
     karten: [
       { titel: "So geht's", bild: "📝",
-        text: "Dich erwarten 20 Fragen aus allen Lektionen, darunter einige Rechenaufgaben. Sie sind etwas kniffliger als in den einzelnen Lektionen. Nimm dir Zeit, rechne in Ruhe und leg dir einen Zettel bereit.\n[[Ab 16 richtigen Antworten hast du bestanden]] und bekommst deinen Börsen-Führerschein. Klappt es noch nicht, schau dir die Lektionen noch einmal an und versuch es dann erneut. Viel Erfolg!" }
+        text: "Dich erwarten 22 Fragen aus allen Lektionen, darunter einige Rechenaufgaben. Sie sind etwas kniffliger als in den einzelnen Lektionen. Nimm dir Zeit, rechne in Ruhe und leg dir einen Zettel bereit.\n[[Ab 18 richtigen Antworten hast du bestanden]] und bekommst deinen Börsen-Führerschein. Klappt es noch nicht, schau dir die Lektionen noch einmal an und versuch es dann erneut. Viel Erfolg!" }
     ],
     quiz: [
       { frage: "Was besitzt du, wenn du eine Aktie kaufst?", optionen: ["Einen kleinen Anteil an einem Unternehmen", "Ein Recht auf feste Zinsen", "Einen Gutschein für die Produkte der Firma"], richtig: 0, erklaerung: "Mit einer Aktie wirst du Miteigentümer. Feste Zinsen gibt es bei einem Kredit, nicht bei einer Aktie." },
@@ -503,6 +565,8 @@ BC.lektionen = [
       { frage: "Was muss eine Firma tun, sobald ihre Aktien an der Börse gehandelt werden?", optionen: ["Regelmäßig ihre Zahlen veröffentlichen", "Den Aktionären jedes Jahr den Ausgabepreis zurückzahlen", "Alle Kredite sofort zurückzahlen"], richtig: 0, erklaerung: "Börsenfirmen müssen regelmäßig berichten. Das Geld der Aktionäre müssen sie nicht zurückzahlen, die Aktionäre sind ja Miteigentümer." },
       { frage: "Eine Aktie kostet 120 €. Die Firma macht einen Aktiensplit, bei dem aus jeder Aktie vier werden. Welcher Kurs ist danach ungefähr zu erwarten?", zahl: 30, einheit: "€", erklaerung: "120 € ÷ 4 = 30 €. Wer vorher 1 Aktie zu 120 € hatte, hat jetzt 4 zu je 30 €. Die Firma ist dadurch nicht mehr wert geworden." },
       { frage: "Ein Einkauf kostet heute 200 €. Die Preise steigen in einem Jahr um 5 %. Wie viel kostet derselbe Einkauf dann?", zahl: 210, einheit: "€", erklaerung: "5 % von 200 € sind 10 €. 200 € + 10 € = 210 €. Für dasselbe Geld bekommst du also weniger: Das ist Inflation." },
+      { frage: "Eine Firma macht 200.000 € Umsatz. Material kostet 80.000 €, Personal 70.000 €, sonstige Kosten 20.000 € und Abschreibungen 10.000 €. Wie hoch ist der operative Gewinn?", zahl: 20000, einheit: "€", erklaerung: "200.000 € − 80.000 € − 70.000 € − 20.000 € − 10.000 € = 20.000 €. Davon gehen noch Zinsen und Steuern ab." },
+      { frage: "Ein Aktionär besitzt mehr als die Hälfte der Stimmen einer AG. Was kann er auf der Hauptversammlung meist allein entscheiden?", optionen: ["Wer als Vertreter der Aktionäre im Aufsichtsrat sitzt, der wiederum den Vorstand bestimmt", "Gar nichts, alle Aktionäre haben gleich viel zu sagen", "Wie hoch der Aktienkurs morgen ist"], richtig: 0, erklaerung: "Mit der Mehrheit der Stimmen kann man viele Beschlüsse allein fassen, etwa die Wahl der Aktionärsvertreter im Aufsichtsrat. Den Kurs bestimmt aber der Markt." },
       { frage: "Eine 14-Jährige möchte mit echtem Geld Aktien besitzen. Wie geht das?", optionen: ["Ihre Eltern eröffnen für sie ein Junior-Depot und entscheiden mit", "Sie eröffnet allein ein Depot per App", "Gar nicht, Aktien darf man erst ab 18 besitzen"], richtig: 0, erklaerung: "Unter 18 geht ein echtes Depot nur als Junior-Depot, das die Eltern eröffnen und verwalten. Das Geld darin gehört aber dem Kind." }
     ]
   }
