@@ -150,7 +150,7 @@ mark { background: var(--gold-hell); padding: 0 3px; border-radius: 4px; }
   var S = {
     passwort: lies("bc-passwort"), kind: lies("bc-kind"), pin: lies("bc-pin"),
     stand: null, kinderAuswahl: null, pinEingabe: "", pinKind: null, pinMerken: true, fehler: "",
-    marktFilter: "Alle", suche: "", handelArt: "kauf", handelStueck: 1, zeitraum: "1mo", verlauf: {}, lektion: null, offen: {}
+    marktFilter: "Alle", suche: "", handelArt: "kauf", handelStueck: 1, zeitraum: "1mo", verlauf: {}, lektion: null, offen: {}, lern: null, wdhRunde: null
   };
   if (window.BC_DEMO && window.BC_DEMO_EINRICHTEN) window.BC_DEMO_EINRICHTEN();
 
@@ -206,7 +206,7 @@ mark { background: var(--gold-hell); padding: 0 3px; border-radius: 4px; }
     }, function () { laedt = false; S.ladeFehler = "Keine Verbindung zum Club-Server. Bist du online?"; if (!stumm) toast(S.ladeFehler); });
   }
   function abmelden(passwortAuch) {
-    S.kind = null; S.pin = null; schreib("bc-kind", null); schreib("bc-pin", null);
+    S.kind = null; S.pin = null; S.lern = null; S.lektion = null; S.wdhRunde = null; schreib("bc-kind", null); schreib("bc-pin", null);
     if (passwortAuch) { S.passwort = null; schreib("bc-passwort", null); S.stand = null; }
     geh("#/");
   }
@@ -218,10 +218,70 @@ mark { background: var(--gold-hell); padding: 0 3px; border-radius: 4px; }
   function aktie(id) { var a = null; (S.stand ? S.stand.aktien : []).forEach(function (x) { if (x.id === id) a = x; }); return a; }
   function tagPlus(a) { return a && a.kurs && a.vortag ? (a.kurs / a.vortag - 1) * 100 : 0; }
   function rangliste() { return depots().slice().sort(function (a, b) { return b.wert - a.wert; }); }
-  function lektionErledigt(d, l) { var e = d && d.lektionen[l.id]; return !!e && (!l.abschluss || e.sterne >= (l.bestehen || 0)); }
+  function sterneNoetig(l, von) { return l.abschluss ? (l.bestehen || 0) : Math.ceil(((S.stand && S.stand.bestehenProzent != null) ? S.stand.bestehenProzent : 60) / 100 * von - 1e-9); }
+  function lektionErledigt(d, l) {
+    var e = d && d.lektionen[l.id];
+    if (!e) return false;
+    if (l.abschluss) return e.sterne >= (l.bestehen || 0);
+    return e.bestanden != null ? !!e.bestanden : e.sterne >= sterneNoetig(l, e.von);
+  }
   function lektionOffen(d, l) {
     var i = BC.lektionen.indexOf(l);
-    return i === 0 || lektionErledigt(d, BC.lektionen[i - 1]);
+    return i <= 0 || lektionErledigt(d, BC.lektionen[i - 1]);
+  }
+  // ---------- Wiederholen und Extras ----------
+  function kurzHash(t) { var h = 5381; t = String(t); for (var i = 0; i < t.length; i++) h = ((h * 33) ^ t.charCodeAt(i)) >>> 0; return h.toString(36); }
+  function fragKey(lid, f) { return lid + "#" + kurzHash(f.frage); }
+  function extraLektion(x) {
+    if (!x._l) x._l = { id: "extra-" + x.id, art: "extra", x: x, titel: x.titel, emoji: x.emoji || "✨", einleitung: x.einleitung, karten: x.karten || [], quiz: x.quiz || [], dauer: 10 };
+    return x._l;
+  }
+  function fragenIndex() {
+    if (S.fIndex && S.fIndexVon === S.lern) return S.fIndex;
+    var m = {};
+    BC.lektionen.forEach(function (l) { l.quiz.forEach(function (f) { m[fragKey(l.id, f)] = { f: f, titel: l.titel, emoji: l.emoji, lid: l.id }; }); });
+    ((S.lern && S.lern.extras) || []).forEach(function (x) { var l = extraLektion(x); l.quiz.forEach(function (f) { m[fragKey(l.id, f)] = { f: f, titel: l.titel, emoji: l.emoji, lid: l.id }; }); });
+    S.fIndex = m; S.fIndexVon = S.lern;
+    return m;
+  }
+  function faelligeListe() {
+    if (!S.lern || !S.lern.wdh) return [];
+    var m = fragenIndex(), tag = S.lern.heute;
+    return S.lern.wdh.filter(function (w) { return w.f <= tag && m[w.k]; });
+  }
+  function auffrischListe() {
+    if (!S.lern || !S.lern.auffrischen) return [];
+    var m = fragenIndex();
+    return S.lern.auffrischen.filter(function (k) { return m[k]; }).slice(0, S.lern.auffrischenAnzahl || 2);
+  }
+  function wdhAnzahl() { return Math.min(10, faelligeListe().length) + auffrischListe().length; }
+  function gesperrt() { return !!S.lern && faelligeListe().length >= ((S.stand && S.stand.wiederholenAb) || 10); }
+  function neuGesperrt(d, l) { return gesperrt() && !(d && d.lektionen[l.id]); }
+  function offeneExtras() { return ((S.lern && S.lern.extras) || []).filter(function (x) { return !x.erledigt; }); }
+  function lernstandLaden() {
+    if (S.lernLaedt || !S.kind || !S.pin || (S.lernVersuch && Date.now() - S.lernVersuch < 60000)) return;
+    S.lernLaedt = true; S.lernVersuch = Date.now();
+    mitPin("lernstand").then(function (r) {
+      S.lernLaedt = false;
+      if (r.ok && r.wdh) { S.lern = r; S.lernVersuch = 0; var h = location.hash || "#/"; if (h === "#/" || h === "#/lernen" || (h.indexOf("#/lektion/") === 0 && !(S.lektion && h === "#/lektion/" + S.lektion.id))) zeichne(); }
+    }, function () { S.lernLaedt = false; });
+  }
+  function wiederholungStarten() {
+    var m = fragenIndex();
+    var liste = mischen(faelligeListe().slice(0, 10).map(function (w) { return { k: w.k, quelle: "wiederholung" }; }))
+      .concat(mischen(auffrischListe().map(function (k) { return { k: k, quelle: "auffrischen" }; })));
+    S.wdhRunde = { id: "wiederholen", art: "wiederholen", titel: "Wiederholen", emoji: "🔁", karten: [], dauer: 5,
+      quiz: liste.map(function (x) { return m[x.k].f; }),
+      meta: liste.map(function (x) { var e = m[x.k]; return { k: x.k, quelle: x.quelle, lid: e.lid, herkunft: e.emoji + " " + e.titel }; }) };
+    return S.wdhRunde;
+  }
+  function lektionFinden(id) {
+    var l = null;
+    BC.lektionen.forEach(function (x) { if (x.id === id) l = x; });
+    if (l) return l;
+    if (id === "wiederholen") return S.wdhRunde;
+    ((S.lern && S.lern.extras) || []).forEach(function (x) { if ("extra-" + x.id === id) l = extraLektion(x); });
+    return l;
   }
   function naechsteLektion(d) { for (var i = 0; i < BC.lektionen.length; i++) if (!lektionErledigt(d, BC.lektionen[i])) return BC.lektionen[i]; return null; }
   function lektionNamen(id) { var t = id; BC.lektionen.forEach(function (l) { if (l.id === id) t = l.titel; }); return t; }
@@ -353,7 +413,9 @@ mark { background: var(--gold-hell); padding: 0 3px; border-radius: 4px; }
     h += '<div class="karte"><div class="reihe"><div class="wachsen"><h3>📚 Lernen</h3><div class="leise klein">' + fertig + " von " + BC.lektionen.length +
       ' Lektionen geschafft · <span class="stern">⭐ ' + d.sterne + "</span></div></div></div>" +
       '<div class="fortschritt" style="margin:10px 0 12px"><i style="width:' + (BC.lektionen.length ? fertig / BC.lektionen.length * 100 : 0) + '%"></i></div>' +
-      (n ? '<a class="knopf breit" href="#/lektion/' + n.id + '">' + esc(n.emoji) + " Weiter: " + esc(n.titel) + "</a>" : '<p>🏆 Du hast alle Lektionen geschafft! Du hast den Börsen-Führerschein.</p>') + "</div>";
+      (n && neuGesperrt(d, n) ? '<a class="knopf breit" href="#/lektion/wiederholen">🔁 Erst wiederholen, dann: ' + esc(n.titel) + "</a>" :
+        n ? '<a class="knopf breit" href="#/lektion/' + n.id + '">' + esc(n.emoji) + " Weiter: " + esc(n.titel) + "</a>" : '<p>🏆 Du hast alle Lektionen geschafft! Du hast den Börsen-Führerschein.</p>') + "</div>";
+    h += wdhKarte() + extrasKarte();
     if (!d.handelFrei) h += '<div class="schloss karte">🔒 <b>Kaufen und Verkaufen</b> wird frei, sobald du die Lektion „' + esc(lektionNamen(S.stand.handelAb)) + '“ geschafft hast. Bis dahin kannst du schon im Markt stöbern.</div>';
     var akt = S.stand.aktien.filter(function (a) { return a.kurs && a.vortag; }).slice().sort(function (a, b) { return tagPlus(b) - tagPlus(a); });
     if (akt.length > 3) {
@@ -364,6 +426,20 @@ mark { background: var(--gold-hell); padding: 0 3px; border-radius: 4px; }
     }
     h += '<div class="karte"><h3>💬 Neues im Club</h3>' + handelsListe(S.stand.handel.slice(0, 5)) + '<p style="margin:8px 0 0"><a href="#/club">Alle Depots ansehen →</a></p></div>';
     return rahmen(h, "#/");
+  }
+  function wdhKarte() {
+    var n = wdhAnzahl();
+    if (!n) return "";
+    return '<div class="karte"><h3>🔁 Wiederholen</h3><p class="leise klein" style="margin:4px 0 10px">' + (n === 1 ? "Eine Frage" : n + " Fragen") +
+      " von früher " + (n === 1 ? "wartet" : "warten") + " auf dich. Was du falsch hattest, kommt wieder, bis es sitzt. Und ab und zu prüfen wir, ob du Altes noch weißt.</p>" +
+      (gesperrt() ? '<div class="schloss" style="margin-bottom:10px">Viele Fragen sind fällig. Erst wiederholen, dann wird die nächste Lektion frei.</div>' : "") +
+      '<a class="knopf breit" href="#/lektion/wiederholen">Jetzt wiederholen (' + n + ")</a></div>";
+  }
+  function extrasKarte() {
+    var x = offeneExtras();
+    if (!x.length) return "";
+    return '<div class="karte"><h3>✨ Extra für dich</h3><p class="leise klein" style="margin:4px 0 10px">Eine Zusatz-Lektion, extra für dich zusammengestellt.</p><ul class="liste">' +
+      x.map(function (e) { return '<li><a class="zeile" href="#/lektion/extra-' + esc(e.id) + '"><span class="emoji">' + esc(e.emoji) + '</span><span class="mitte"><b>' + esc(e.titel) + '</b><span class="leise klein">' + e.quiz.length + ' Fragen</span></span><span class="rechts"><span class="pille plus">Los!</span></span></a></li>'; }).join("") + "</ul></div>";
   }
   function handelsListe(liste) {
     if (!liste.length) return '<p class="leise">Noch hat niemand gehandelt. Wer kauft die erste Aktie?</p>';
@@ -384,32 +460,62 @@ mark { background: var(--gold-hell); padding: 0 3px; border-radius: 4px; }
   // ---------- Lernen ----------
   function seiteLernen() {
     var d = meinDepot();
-    var h = "<h1>📚 Lernen</h1><p class=\"leise\">Schritt für Schritt von der Wirtschaft über Unternehmen und Börse bis zum eigenen Depot. Jede Lektion dauert etwa 10 bis 15 Minuten. Für jede Frage, die du beim ersten Versuch richtig hast, bekommst du einen Stern ⭐.</p>";
+    var h = "<h1>📚 Lernen</h1><p class=\"leise\">Schritt für Schritt von der Wirtschaft über Unternehmen und Börse bis zum eigenen Depot. Jede Lektion dauert etwa 10 bis 15 Minuten. Für jede Frage, die du beim ersten Versuch richtig hast, bekommst du einen Stern ⭐. Die nächste Lektion wird frei, wenn du mindestens " + ((S.stand && S.stand.bestehenProzent != null) ? S.stand.bestehenProzent : 60) + " % der Sterne einer Lektion hast.</p>";
+    h += wdhKarte() + extrasKarte();
     BC.module.forEach(function (m) {
       h += '<div class="modul-kopf"><span>' + esc(m.emoji) + "</span>Teil " + m.nr + ": " + esc(m.titel) + "</div>";
       BC.lektionen.filter(function (l) { return l.modul === m.nr; }).forEach(function (l) {
         var fertig = lektionErledigt(d, l), offen = lektionOffen(d, l), e = d && d.lektionen[l.id];
-        var rechts = fertig ? '<span class="stern">⭐ ' + e.sterne + "/" + e.von + "</span>" : offen ? '<span class="pille plus">Los!</span>' : "🔒";
-        if (l.abschluss && e && !fertig) rechts = '<span class="pille minus">' + e.sterne + "/" + e.von + " – nochmal</span>";
-        h += '<a class="lektion ' + (fertig ? "" : offen ? "dran" : "zu") + '" href="' + (offen ? "#/lektion/" + l.id : "#/lernen") + '" data-zu="' + (offen ? "" : "1") + '"><span class="emoji">' + esc(l.emoji) +
+        var wdhZuerst = offen && !fertig && neuGesperrt(d, l);
+        var rechts = fertig ? '<span class="stern">⭐ ' + e.sterne + "/" + e.von + "</span>" : wdhZuerst ? '<span class="pille minus">🔁 erst wiederholen</span>' : offen ? '<span class="pille plus">Los!</span>' : "🔒";
+        if (e && !fertig) rechts = '<span class="pille minus">' + e.sterne + "/" + e.von + " – nochmal</span>";
+        h += '<a class="lektion ' + (fertig ? "" : offen ? "dran" : "zu") + '" href="' + (wdhZuerst ? "#/lektion/wiederholen" : offen ? "#/lektion/" + l.id : "#/lernen") + '" data-zu="' + (offen ? "" : "1") + '"><span class="emoji">' + esc(l.emoji) +
           '</span><span class="wachsen" style="flex:1"><b>' + esc(l.titel) + '</b><br><span class="leise klein">ca. ' + (l.dauer || 10) + " Min." + (l.abschluss ? " · Abschlussprüfung" : "") + "</span></span>" + rechts + "</a>";
       });
     });
+    var erledigt = ((S.lern && S.lern.extras) || []).filter(function (x) { return x.erledigt; });
+    if (erledigt.length) {
+      h += '<div class="modul-kopf"><span>✨</span>Deine Extras</div>';
+      erledigt.forEach(function (x) {
+        h += '<a class="lektion" href="#/lektion/extra-' + esc(x.id) + '"><span class="emoji">' + esc(x.emoji) + '</span><span class="wachsen" style="flex:1"><b>' + esc(x.titel) +
+          '</b><br><span class="leise klein">Extra vom ' + esc(datum(x.erstellt)) + '</span></span><span class="stern">⭐ ' + x.sterne + "/" + x.von + "</span></a>";
+      });
+    }
     return rahmen(h, "#/lernen");
   }
-  function lektionStarten(l) {
+  function lektionStarten(l, nurQuiz) {
     var kartenAnz = l.karten.length + (l.ausprobieren ? 1 : 0);
-    var fragen = l.quiz.map(function (f, i) { return { f: f, i: i, optionen: f.optionen ? mischen(f.optionen.map(function (o, j) { return { t: o, richtig: j === (f.richtig || 0) }; })) : null }; });
-    S.lektion = { id: l.id, schritt: 0, kartenAnz: kartenAnz, fragen: l.abschluss ? mischen(fragen) : fragen, warteschlange: null, ersteVersuche: {}, aktuell: null, antwort: null, fertig: false, gespeichert: false };
+    var art = l.art || "lektion";
+    var fragen = l.quiz.map(function (f, i) {
+      var m = l.meta ? l.meta[i] : null;
+      return { f: f, i: i, k: m ? m.k : fragKey(l.id, f), quelle: m ? m.quelle : art, lid: m ? m.lid : l.id, herkunft: m ? m.herkunft : "",
+        optionen: f.optionen ? mischen(f.optionen.map(function (o, j) { return { t: o, richtig: j === (f.richtig || 0) }; })) : null };
+    });
+    S.lektion = { id: l.id, schritt: nurQuiz ? kartenAnz : 0, kartenAnz: kartenAnz, fragen: l.abschluss ? mischen(fragen) : fragen, warteschlange: null, ersteVersuche: {}, aktuell: null, antwort: null, fertig: false, gespeichert: false };
   }
   function seiteLektion(id) {
-    var l = null; BC.lektionen.forEach(function (x) { if (x.id === id) l = x; });
-    if (!l) return rahmen("<p>Diese Lektion gibt es nicht.</p>", "#/lernen");
     var d = meinDepot();
-    if (!lektionOffen(d, l)) return rahmen('<div class="karte schloss">🔒 Diese Lektion wird frei, wenn du die vorige geschafft hast.</div><a class="knopf" href="#/lernen">Zur Übersicht</a>', "#/lernen");
-    if (!S.lektion || S.lektion.id !== id) lektionStarten(l);
+    if (id === "wiederholen" && (!S.lektion || S.lektion.id !== id)) {
+      if (!S.lern) { lernstandLaden(); return rahmen('<div class="laden">Lädt …</div>', "#/lernen"); }
+      wiederholungStarten();
+      if (!S.wdhRunde.quiz.length) return rahmen('<div class="karte" style="text-align:center"><div class="feier">🎉</div><h2>Gerade gibt es nichts zu wiederholen</h2><p>Alles, was du falsch hattest, ist entweder geschafft oder erst später wieder dran.</p><a class="knopf" href="#/lernen">Zum Lernen</a></div>', "#/lernen");
+    }
+    var l = lektionFinden(id);
+    if (!l) {
+      if (id.indexOf("extra-") === 0 && !S.lern) { lernstandLaden(); return rahmen('<div class="laden">Lädt …</div>', "#/lernen"); }
+      return rahmen("<p>Diese Lektion gibt es nicht.</p>", "#/lernen");
+    }
+    var istLektion = !l.art;
+    if (istLektion && !lektionOffen(d, l)) return rahmen('<div class="karte schloss">🔒 Diese Lektion wird frei, wenn du die vorige geschafft hast.</div><a class="knopf" href="#/lernen">Zur Übersicht</a>', "#/lernen");
+    if (!S.lektion || S.lektion.id !== id) {
+      if (istLektion && neuGesperrt(d, l)) return rahmen('<div class="karte" style="text-align:center"><div class="feier">🔁</div><h2>Erst wiederholen</h2><p>' + faelligeListe().length +
+        " Fragen von früher warten auf dich. Wenn du sie wiederholt hast, geht es mit „" + esc(l.titel) + "“ weiter. So bleibt das Wissen im Kopf.</p>" +
+        '<a class="knopf breit" href="#/lektion/wiederholen">Jetzt wiederholen</a><p></p><a href="#/lernen">Zur Übersicht</a></div>', "#/lernen");
+      lektionStarten(l);
+    }
     var L = S.lektion;
     var h = '<p class="leise klein" style="margin:4px 0 0"><a href="#/lernen">← Lernen</a></p><h1>' + esc(l.emoji) + " " + esc(l.titel) + "</h1>";
+    if (l.art === "extra" && l.x.grund && L.schritt === 0 && L.kartenAnz) h += '<p class="leise klein">✨ Extra für dich</p>';
     if (L.schritt < L.kartenAnz) {
       var punkte = ""; for (var i = 0; i < L.kartenAnz + 1; i++) punkte += '<i class="' + (i <= L.schritt ? "an" : "") + '"></i>';
       var k = L.schritt < l.karten.length ? l.karten[L.schritt] : { titel: "Probier's aus!", bild: "🔍", text: l.ausprobieren };
@@ -424,7 +530,8 @@ mark { background: var(--gold-hell); padding: 0 3px; border-radius: 4px; }
     if (L.fertig || !L.warteschlange.length) return rahmen(h + lektionsEnde(l), "#/lernen");
     var q = L.warteschlange[0], f = q.f;
     var gesamt = L.fragen.length, gemacht = Object.keys(L.ersteVersuche).filter(function (k) { return Number(k) !== q.i; }).length;
-    h += '<div class="leise klein">' + (l.abschluss ? "Prüfungsfrage " : "Frage ") + Math.min(gemacht + 1, gesamt) + " von " + gesamt + (q.nochmal ? " · noch einmal" : "") + "</div>" +
+    h += '<div class="leise klein">' + (l.abschluss ? "Prüfungsfrage " : "Frage ") + Math.min(gemacht + 1, gesamt) + " von " + gesamt + (q.nochmal ? " · noch einmal" : "") +
+      (q.herkunft ? " · " + (q.quelle === "auffrischen" ? "Weißt du es noch? " : "") + "aus „" + esc(q.herkunft) + "“" : "") + "</div>" +
       '<div class="fortschritt" style="margin:6px 0 14px"><i style="width:' + (gemacht / gesamt * 100) + '%"></i></div><div class="karte"><h3 style="font-size:18px">' + md(f.frage).replace(/<\/?p>/g, "") + "</h3><div style=\"margin-top:12px\">";
     var A = L.antwort;
     if (q.optionen) {
@@ -455,7 +562,7 @@ mark { background: var(--gold-hell); padding: 0 3px; border-radius: 4px; }
   }
   function naechsteFrage(l) {
     var L = S.lektion, q = L.warteschlange.shift();
-    if (!L.antwort.ok && !l.abschluss) L.warteschlange.push({ f: q.f, i: q.i, optionen: q.optionen ? mischen(q.optionen) : null, nochmal: true });
+    if (!L.antwort.ok && !l.abschluss) L.warteschlange.push({ f: q.f, i: q.i, k: q.k, quelle: q.quelle, lid: q.lid, herkunft: q.herkunft, optionen: q.optionen ? mischen(q.optionen) : null, nochmal: true });
     L.antwort = null;
     if (!L.warteschlange.length) { L.fertig = true; lektionSpeichern(l); }
     zeichne();
@@ -463,24 +570,50 @@ mark { background: var(--gold-hell); padding: 0 3px; border-radius: 4px; }
   }
   function sterneVon(L) { var s = 0; for (var k in L.ersteVersuche) if (L.ersteVersuche[k]) s++; return s; }
   function lektionSpeichern(l) {
-    var L = S.lektion, s = sterneVon(L);
-    mitPin("lektion", { lektion: l.id, sterne: s, von: L.fragen.length }).then(function (r) {
-      if (r.ok) { S.stand = r; L.gespeichert = true; if (location.hash === "#/lektion/" + l.id) zeichne(); }
+    var L = S.lektion, s = sterneVon(L), n = L.fragen.length;
+    var antw = L.fragen.map(function (q) { return { k: q.k, l: q.lid, r: !!L.ersteVersuche[q.i], t: q.f.frage.slice(0, 120), quelle: q.quelle }; });
+    var weg = l.art === "wiederholen" ? mitPin("antworten", { antworten: antw }) : l.art === "extra" ? mitPin("extra", { id: l.x.id, sterne: s, von: n, antworten: antw }) :
+      mitPin("lektion", { lektion: l.id, sterne: s, von: n, bestanden: s >= sterneNoetig(l, n), antworten: antw });
+    weg.then(function (r) {
+      if (r.ok) {
+        if (r.depots) S.stand = r;
+        if (r.lernstand) S.lern = r.lernstand; else if (r.wdh) S.lern = r;
+        L.gespeichert = true; if (location.hash === "#/lektion/" + l.id) zeichne();
+      }
       else if (!r.pin) toast(r.text || "Konnte nicht gespeichert werden.");
     }, function () { toast("Keine Verbindung – dein Ergebnis wurde nicht gespeichert."); L.speicherFehler = true; zeichne(); });
   }
   function lektionsEnde(l) {
     var L = S.lektion, s = sterneVon(L), n = L.fragen.length;
-    var bestanden = !l.abschluss || s >= (l.bestehen || 0);
+    var speichern = L.speicherFehler ? '<p class="minus">Nicht gespeichert (keine Verbindung). <a href="#" data-aktion="nochmal-speichern">Nochmal versuchen</a></p>' : !L.gespeichert ? '<p class="leise">Wird gespeichert …</p>' : "";
+    var stern = '<p class="stern" style="font-size:22px">⭐ ' + s + " von " + n + "</p>";
+    if (l.art === "wiederholen") {
+      var rest = L.gespeichert ? wdhAnzahl() : 0;
+      return '<div class="karte" style="text-align:center"><div class="feier">' + (s === n ? "🌟" : "✅") + "</div><h2>Runde geschafft!</h2>" + stern +
+        '<p class="leise">' + (s === n ? "Alles beim ersten Versuch gewusst. Stark!" : "Was diesmal falsch war, kommt morgen noch einmal. Was richtig war, prüfen wir in ein paar Tagen wieder.") + "</p>" + speichern +
+        (rest ? '<button class="knopf breit" data-aktion="wdh-neu">Noch eine Runde (' + rest + ")</button><p></p>" : "") +
+        '<a class="knopf ' + (rest ? "zweit " : "") + 'breit" href="#/lernen">Zum Lernen</a></div>';
+    }
+    if (l.art === "extra") {
+      return '<div class="karte" style="text-align:center"><div class="feier">✨</div><h2>Extra geschafft!</h2>' + stern + speichern +
+        '<a class="knopf breit" href="#/lernen">Zum Lernen</a><p></p><button class="knopf zweit breit" data-aktion="lektion-neu">Extra nochmal machen</button></div>';
+    }
+    var noetig = sterneNoetig(l, n), jetztGut = s >= noetig;
     var d = meinDepot(), idx = BC.lektionen.indexOf(l), naechste = BC.lektionen[idx + 1];
-    var h = '<div class="karte" style="text-align:center"><div class="feier">' + (bestanden ? (l.abschluss ? "🏆" : "🎉") : "💪") + "</div>";
-    if (l.abschluss) h += bestanden ? "<h2>Bestanden! Du hast den Börsen-Führerschein!</h2>" : "<h2>Diesmal noch nicht bestanden</h2><p>Du brauchst " + l.bestehen + " richtige Antworten. Schau dir die Lektionen noch einmal an und versuch es dann wieder.</p>";
-    else h += "<h2>Lektion geschafft!</h2>";
-    h += '<p class="stern" style="font-size:22px">⭐ ' + s + " von " + n + "</p>";
-    h += L.speicherFehler ? '<p class="minus">Nicht gespeichert (keine Verbindung). <a href="#" data-aktion="nochmal-speichern">Nochmal versuchen</a></p>' : !L.gespeichert ? '<p class="leise">Wird gespeichert …</p>' : "";
+    var frei = jetztGut || lektionErledigt(d, l);
+    var h = '<div class="karte" style="text-align:center"><div class="feier">' + (jetztGut ? (l.abschluss ? "🏆" : "🎉") : "💪") + "</div>";
+    if (l.abschluss) h += jetztGut ? "<h2>Bestanden! Du hast den Börsen-Führerschein!</h2>" : "<h2>Diesmal noch nicht bestanden</h2><p>Du brauchst " + l.bestehen + " richtige Antworten. Schau dir die Lektionen noch einmal an und versuch es dann wieder.</p>";
+    else if (jetztGut) h += "<h2>Lektion geschafft!</h2>";
+    else h += "<h2>Fast! Noch einmal üben</h2><p>Für die nächste Lektion brauchst du mindestens <b>" + noetig + " von " + n + "</b> Sternen. Lies dir die Karten noch einmal in Ruhe durch und mach dann das Quiz nochmal. Beim zweiten Mal klappt es meistens viel besser.</p>";
+    h += stern + speichern;
     if (l.id === S.stand.handelAb && L.gespeichert && d && d.handelFrei) h += '<div class="schloss" style="background:var(--plus-hell);margin:12px 0">🔓 <b>Der Handel ist jetzt frei!</b> Du kannst im Markt deine ersten Aktien kaufen.</div><a class="knopf breit" href="#/markt">Zum Markt 🛒</a><p></p>';
-    if (naechste && bestanden) h += '<a class="knopf breit" href="#/lektion/' + naechste.id + '">Nächste Lektion: ' + esc(naechste.titel) + "</a><p></p>";
-    h += '<button class="knopf zweit breit" data-aktion="lektion-neu">Lektion wiederholen</button></div>';
+    if (naechste && frei) {
+      if (L.gespeichert && neuGesperrt(d, naechste)) h += '<div class="schloss" style="margin:12px 0">🔁 Bevor es weitergeht: ' + faelligeListe().length + " Fragen von früher warten auf dich.</div>" +
+        '<a class="knopf breit" href="#/lektion/wiederholen">Jetzt wiederholen</a><p></p>';
+      else h += '<a class="knopf breit" href="#/lektion/' + naechste.id + '">Nächste Lektion: ' + esc(naechste.titel) + "</a><p></p>";
+    }
+    if (!jetztGut && !l.abschluss) h += '<button class="knopf breit" data-aktion="lektion-neu">Karten nochmal lesen</button><p></p><button class="knopf zweit breit" data-aktion="quiz-neu">Nur das Quiz nochmal</button></div>';
+    else h += '<button class="knopf zweit breit" data-aktion="lektion-neu">Lektion wiederholen</button></div>';
     return h;
   }
 
@@ -688,6 +821,7 @@ mark { background: var(--gold-hell); padding: 0 3px; border-radius: 4px; }
       return;
     }
     if (!meinDepot()) { abmelden(false); return; }
+    if (!S.lern) lernstandLaden();
     var seite = teile[0] || "";
     var html;
     if (seite === "lernen") html = seiteLernen();
@@ -721,7 +855,6 @@ mark { background: var(--gold-hell); padding: 0 3px; border-radius: 4px; }
       }, function () { S.passwort = null; S.fehler = "Keine Verbindung zum Club-Server."; zeichne(); });
     }
     if (f === "zahl") {
-      var l = null, id = location.hash.split("/")[2]; BC.lektionen.forEach(function (x) { if (x.id === id) l = x; });
       var t = document.getElementById("zahl").value, z = zahlLesen(t);
       if (isNaN(z)) { toast("Bitte gib eine Zahl ein."); return; }
       var soll = S.lektion.warteschlange[0].f.zahl;
@@ -751,11 +884,13 @@ mark { background: var(--gold-hell); padding: 0 3px; border-radius: 4px; }
     if (!a) return;
     if (a === "merken") { S.pinMerken = el.checked; return; }
     e.preventDefault();
-    var lek = null; BC.lektionen.forEach(function (x) { if (x.id === id) lek = x; });
+    var lek = lektionFinden(id);
     if (a === "weiter") { S.lektion.schritt++; zeichne(); window.scrollTo(0, 0); }
     else if (a === "zurueck") { S.lektion.schritt--; zeichne(); window.scrollTo(0, 0); }
     else if (a === "naechste") naechsteFrage(lek);
     else if (a === "lektion-neu") { lektionStarten(lek); zeichne(); window.scrollTo(0, 0); }
+    else if (a === "quiz-neu") { lektionStarten(lek, true); zeichne(); window.scrollTo(0, 0); }
+    else if (a === "wdh-neu") { lektionStarten(wiederholungStarten()); zeichne(); window.scrollTo(0, 0); }
     else if (a === "nochmal-speichern") { S.lektion.speicherFehler = false; lektionSpeichern(lek); zeichne(); }
     else if (a === "max") {
       var d = meinDepot(), ak = aktie(id), pos = null; d.positionen.forEach(function (p) { if (p.id === id) pos = p; });
@@ -785,6 +920,7 @@ mark { background: var(--gold-hell); padding: 0 3px; border-radius: 4px; }
   window.addEventListener("hashchange", function () {
     var h = location.hash;
     if (h.indexOf("#/aktie/") !== 0) { S.handelArt = "kauf"; S.handelStueck = 1; }
+    if (h === "#/lektion/wiederholen" && S.lektion && S.lektion.id === "wiederholen" && S.lektion.fertig) S.lektion = null; // neue Runde
     zeichne(); window.scrollTo(0, 0);
   });
   function stillAktualisieren() {
@@ -792,7 +928,8 @@ mark { background: var(--gold-hell); padding: 0 3px; border-radius: 4px; }
     var h = location.hash;
     var aktiv = document.activeElement;
     if (document.querySelector(".schleier") || h.indexOf("#/lektion/") === 0 || (aktiv && aktiv.tagName === "INPUT")) return;
-    standLaden(true).then(function () { if (location.hash === h && !document.querySelector(".schleier")) zeichne(); });
+    if (S.lern && S.lern.heute && S.stand && S.stand.zeit && S.stand.zeit.slice(0, 10) !== S.lern.heute) S.lern = null; // neuer Tag
+    standLaden(true).then(function () { if (location.hash === h && !document.querySelector(".schleier")) zeichne(); if (!S.lern) lernstandLaden(); });
   }
   setInterval(stillAktualisieren, 120000);
   document.addEventListener("visibilitychange", function () { if (!document.hidden) stillAktualisieren(); });

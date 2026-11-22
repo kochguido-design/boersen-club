@@ -35,6 +35,7 @@
     return this;
   };
   Range.prototype.setFormulas = Range.prototype.setValues;
+  Range.prototype.setValue = function (v) { return this.setValues([[v]]); };
   Range.prototype.clearContent = function () {
     var z = this.zeilen();
     for (var i = 0; i < this.nr; i++) { var reihe = z[this.r - 1 + i]; if (reihe) for (var j = 0; j < this.nc; j++) reihe[this.c - 1 + j] = ""; }
@@ -57,7 +58,27 @@
     insertSheet: function (n) { daten.blaetter[n] = []; daten.reihenfolge.push(n); sichern(); return new Sheet(n); }
   };
   window.SpreadsheetApp = { getActiveSpreadsheet: function () { return Tabelle; }, openById: function () { return Tabelle; } };
-  window.PropertiesService = { getScriptProperties: function () { return { getProperty: function () { return null; }, setProperty: function () { } }; } };
+  var props = {};
+  window.PropertiesService = { getScriptProperties: function () { return { getProperty: function (k) { return k === "TABELLE" ? null : (props[k] || null); }, setProperty: function (k, v) { props[k] = String(v); } }; } };
+
+  // Drive und Mail nur im Speicher (für Tests von wochenExport und wochenBericht in der Konsole)
+  var drive = { dateien: [] };
+  function Iter(liste) { var i = 0; return { hasNext: function () { return i < liste.length; }, next: function () { return liste[i++]; } }; }
+  function Datei(n, inhalt) { this.n = n; this.inhalt = inhalt; this.id = "f" + Math.random().toString(36).slice(2, 9); this.d = new Date(); this.weg = false; }
+  Datei.prototype.getName = function () { return this.n; };
+  Datei.prototype.getId = function () { return this.id; };
+  Datei.prototype.getDateCreated = function () { return this.d; };
+  Datei.prototype.setTrashed = function (t) { this.weg = !!t; return this; };
+  Datei.prototype.getBlob = function () { var t = this.inhalt; return { getDataAsString: function () { return t; } }; };
+  function aktiv() { return drive.dateien.filter(function (f) { return !f.weg; }); }
+  var Ordner = { getId: function () { return "ordner-demo"; }, getName: function () { return "Börsen-Club – Auswertung"; },
+    createFile: function (n, inhalt) { var f = new Datei(n, inhalt); drive.dateien.push(f); return f; },
+    getFilesByName: function (n) { return Iter(aktiv().filter(function (f) { return f.n === n; })); },
+    getFiles: function () { return Iter(aktiv()); } };
+  window.DriveApp = { getFolderById: function () { return Ordner; }, getFoldersByName: function () { return Iter([Ordner]); }, createFolder: function () { return Ordner; } };
+  window.MailApp = { sendEmail: function (m) { window.BC_DEMO_MAIL = m; console.log("Demo-Mail an " + m.to + ": " + m.subject); } };
+  window.Session = { getEffectiveUser: function () { return { getEmail: function () { return "demo@example.org"; } }; } };
+  window.BC_DEMO_DRIVE = drive;
 
   var cacheDaten = {};
   window.CacheService = { getScriptCache: function () {
@@ -120,9 +141,35 @@
       ["Lina", "1111", "🦊", "#f97316", "", "ja", "2026-11-01"],
       ["Ben", "2222", "🐻", "#2563eb", "", "ja", "2026-11-01"],
       ["Mila", "3333", "🐼", "#16a34a", "", "ja", "2026-11-01"]];
-    var lern = ["wirtschaft", "unternehmen", "aktie", "boersengang", "boerse", "musterdepot"];
-    lern.forEach(function (l, i) { daten.blaetter.Lernen.push(["2026-11-" + (10 + i) + " 17:00:00", "Ben", l, 5, 6]); });
-    ["wirtschaft", "unternehmen", "aktie"].forEach(function (l) { daten.blaetter.Lernen.push(["2026-11-12 16:00:00", "Mila", l, 6, 6]); });
+    // Lern-Versuche mit einzelnen Antworten (gleiche Schlüssel wie in index.html)
+    function hash(t) { var h = 5381; t = String(t); for (var i = 0; i < t.length; i++) h = ((h * 33) ^ t.charCodeAt(i)) >>> 0; return h.toString(36); }
+    function vorTagen(n) { return Utilities.formatDate(new Date(Date.now() - n * 864e5), "", "yyyy-MM-dd"); }
+    function versuch(kind, lid, tage, falsch) {
+      var l = null; (window.BC ? window.BC.lektionen : []).forEach(function (x) { if (x.id === lid) l = x; });
+      if (!l) return;
+      var zeit = vorTagen(tage) + " 17:00:00", richtig = 0;
+      l.quiz.forEach(function (f, i) {
+        var ok = falsch.indexOf(i) < 0; if (ok) richtig++;
+        daten.blaetter.Antworten.push([zeit, kind, "lektion", lid, lid + "#" + hash(f.frage), ok ? "ja" : "nein", f.frage.slice(0, 120)]);
+      });
+      daten.blaetter.Lernen.push([zeit, kind, lid, richtig, l.quiz.length, richtig >= Math.ceil(0.6 * l.quiz.length - 1e-9) ? "ja" : "nein"]);
+    }
+    ["wirtschaft", "unternehmen", "aktie", "boersengang", "boerse", "musterdepot"].forEach(function (l, i) { versuch("Ben", l, 12 - i, [2]); });
+    versuch("Mila", "wirtschaft", 11, [0, 3, 4, 5]);
+    versuch("Mila", "wirtschaft", 10, [0, 3]);
+    versuch("Mila", "unternehmen", 10, [1, 3, 5]);
+    versuch("Mila", "unternehmen", 9, [1]);
+    versuch("Mila", "aktie", 2, [0, 1, 2, 3]);
+    versuch("Mila", "aktie", 1, [0, 2]);
+    versuch("Mila", "boersengang", 1, [1, 4]);
+    daten.blaetter.Extras.push(["xdemo1", "Mila", "Was gehört dir mit einer Aktie?", "🧩", "Bei Fragen zu Anteilen und Eigentum war Mila noch unsicher.",
+      JSON.stringify({ einleitung: "Eine kurze Zusatzrunde zu einer wichtigen Frage: Was hast du eigentlich, wenn du eine Aktie besitzt?",
+        karten: [{ titel: "Ein kleines Stück der Firma", bild: "🍕", text: "Eine Firma ist wie eine Pizza, die in sehr viele Stücke geteilt ist. Jede **Aktie** ist ein Stück.\nWer eine Aktie hat, ist **Miteigentümer**. Bei 1 Million Aktien gehört dir mit einer Aktie ein Millionstel der Firma." },
+          { titel: "Was du davon hast", bild: "🎁", text: "Als Aktionär darfst du auf der **Hauptversammlung** mit abstimmen und bekommst einen Teil vom Gewinn, wenn die Firma eine **Dividende** zahlt.\n[[Ein Stuhl aus der Firma gehört dir aber nicht.]] Dir gehört ein Anteil am Ganzen." }],
+        quiz: [{ frage: "Eine Firma hat 1.000 Aktien. Du hast 10 davon. Wie viel Prozent der Firma gehören dir?", zahl: 1, einheit: "%", erklaerung: "10 von 1.000 sind 1 %." },
+          { frage: "Was bekommst du als Aktionär, wenn die Firma eine Dividende zahlt?", optionen: ["Einen Teil vom Gewinn", "Einen Rabatt im Laden", "Einen Arbeitsplatz"], richtig: 0, erklaerung: "Die Dividende ist der Teil vom Gewinn, der an die Aktionäre ausgezahlt wird." },
+          { frage: "Darfst du als Aktionär einen Stuhl aus der Firma mit nach Hause nehmen?", optionen: ["Nein, dir gehört ein Anteil am Ganzen, kein einzelnes Ding", "Ja, einen pro Aktie", "Nur mit Erlaubnis der Hauptversammlung"], richtig: 0, erklaerung: "Die Firma gehört allen Aktionären zusammen. Einzelne Dinge darf niemand einfach mitnehmen." }] }),
+      vorTagen(0) + " 08:00:00", "", "", ""]);
     daten.blaetter.Handel.push(["2026-11-14 10:00:00", "Ben", "Kauf", "NTDO", 4, 49.8, 1, 199.2]);
     daten.blaetter.Handel.push(["2026-11-14 10:05:00", "Ben", "Kauf", "EUNL", 3, 120.1, 1, 360.3]);
     var heute = new Date();
