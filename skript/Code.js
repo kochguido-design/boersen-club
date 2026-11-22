@@ -3,7 +3,7 @@
 // Enthält keine Passwörter oder Namen: Die stehen nur in der Tabelle (Blätter „Einstellungen“ und „Kinder“).
 // Läuft auch im Browser (Demo-Modus, skript/demo.js stellt dann SpreadsheetApp & Co. nach).
 
-var BC_VERSION = 2;
+var BC_VERSION = 3;
 var ZONE = "Europe/Berlin";
 var KURS_CACHE_SEK = 600;          // Kurse höchstens alle 10 Minuten neu holen
 var MAX_STUECK = 10000;
@@ -26,6 +26,7 @@ var EINSTELLUNGEN = [
   ["Startgeld", 1000, "Spielgeld in € für jedes neue Kind (pro Kind im Blatt „Kinder“ änderbar)."],
   ["Gebühr", 1, "Gebühr in € pro Kauf oder Verkauf."],
   ["Handel ab Lektion", "musterdepot", "Handeln geht erst, wenn diese Lektion geschafft ist. Leer = sofort."],
+  ["Handel sofort für", "", "Diese Namen dürfen ohne Lektion sofort handeln, mit Komma getrennt (z. B. für Eltern). Leer = niemand."],
   ["Bestehen ab %", 60, "So viel Prozent der Quizfragen muss ein Kind beim ersten Versuch richtig haben, damit die nächste Lektion frei wird."],
   ["Wiederholen ab", 10, "Sind so viele Wiederholungsfragen fällig, wird erst wiederholt, bevor eine neue Lektion frei wird."],
   ["Extras pro Woche", 1, "So viele Zusatzlektionen darf die Wochenauswertung pro Kind und Woche anlegen. 0 = keine."],
@@ -386,6 +387,8 @@ function stand(einst) {
   var depots = depotsBerechnen(kinder, handel, kurs);
   var lernen = lernListe();
   var ab = String(einst["Handel ab Lektion"] || "");
+  var sofort = {};
+  String(einst["Handel sofort für"] || "").split(",").forEach(function (n) { n = n.trim().toLowerCase(); if (n) sofort[n] = true; });
   kinder.forEach(function (k) {
     var d = depots[k.name];
     d.lektionen = {};
@@ -399,7 +402,7 @@ function stand(einst) {
     });
     d.sterne = 0;
     Object.keys(d.lektionen).forEach(function (id) { d.sterne += d.lektionen[id].sterne; });
-    d.handelFrei = !ab || !!(d.lektionen[ab] && d.lektionen[ab].bestanden);
+    d.handelFrei = !ab || !!sofort[k.name.toLowerCase()] || !!(d.lektionen[ab] && d.lektionen[ab].bestanden);
   });
   var aktien = aktienListe().map(function (a) {
     var k = kurs[a.id] || {};
